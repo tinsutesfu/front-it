@@ -3,7 +3,11 @@ import '../styles/shared/amazon-header.css';
 
 
 
-const Layout = () => {
+
+const Layout = ({cartQuantity}) => {
+  
+  
+
   return (
     <>
        <div className="amazon-header">
@@ -32,7 +36,7 @@ const Layout = () => {
 
         <Link className="cart-link header-link" to="checkout">
           <img className="cart-icon" src="images/icons/cart-icon.png"/>
-          <div className="cart-quantity">3</div>
+          <div className="cart-quantity">{cartQuantity}</div>
           <div className="cart-text">Cart</div>
         </Link>
       </div>
