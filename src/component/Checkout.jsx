@@ -48,10 +48,10 @@ const Checkout = ({cart ,cartQuantity,products,setCartQuantity}) => {
         {(!cart || cart.length === 0) ? <p>Your cart is empty.</p> :
         cart.map((item)=>
         
-        <div className="order-summary" key={item.productId}>
+        
          
           
-          <div className="cart-item-container">
+          <div className="cart-item-container" key={item.productId}>
             <div className="delivery-date">
               Delivery date: Wednesday, June 15
             </div>
@@ -65,7 +65,7 @@ const Checkout = ({cart ,cartQuantity,products,setCartQuantity}) => {
                 {products.find((p) => p.id === item.productId)?.name}
                 </div>
                 <div className="product-price">
-                ${(item.priceCents / 100).toFixed(2)}
+                ${((products.find((p) => p.id === item.productId)?.priceCents)/100).toFixed(2) }
                 </div>
                 <div className="product-quantity">
                   <span>
@@ -124,7 +124,7 @@ const Checkout = ({cart ,cartQuantity,products,setCartQuantity}) => {
               </div>
             </div>
           </div>
-        </div>
+        
         
 )}
         <div className="payment-summary">

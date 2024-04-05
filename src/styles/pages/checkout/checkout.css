@@ -24,7 +24,7 @@
   display: grid;
   /* Here, 1fr means the first column will take
      up the remaining space in the grid. */
-  grid-template-columns: 1fr 350px;
+  grid-template-columns: 1fr ;
   column-gap: 12px;
 
   /* Use align-items: start; to prevent the elements
@@ -50,6 +50,7 @@
 }
 
 .cart-item-container {
+  display: grid;
   margin-bottom: 12px;
 }
 
@@ -91,7 +92,9 @@
     row-gap: 30px;
   }
 }
+.cart-item-details{
 
+}
 .product-image {
   max-width: 100%;
   max-height: 120px;

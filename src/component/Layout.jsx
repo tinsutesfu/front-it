@@ -47,4 +47,4 @@ const Layout = ({cartQuantity}) => {
   )
 }
 
-export default Layout
+export default Layout;

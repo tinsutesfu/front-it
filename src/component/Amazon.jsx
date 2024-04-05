@@ -1,11 +1,44 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import '../styles/pages/amazon.css';
 ;
 
 const Amazon = ({cart,setCart,setCartQuantity,products}) => {
- 
+  let timeoutId;
+
+  const displaymessage=(productId)=>{
+    const addedToCartElement = document.querySelector(`.added-to-cart[data-product-id="${productId}"]`);
+    
+    addedToCartElement.style.opacity = 1;
+    
+    clearTimeout(timeoutId);
+
+    timeoutId = setTimeout(() => {
+      addedToCartElement.style.opacity = 0;
+      
+    }, 2000);
+  };
   
-  
+  const handleQuantityChange = (productId, quantity) => {
+    
+    setCart((prevCart) => {
+      const existingItemIndex = prevCart.findIndex((item) => item.productId === productId);
+
+      if (existingItemIndex !== -1) {
+        // Update quantity for existing item
+        return prevCart.map((item, index) =>
+          index === existingItemIndex ? { ...item, quantity } : item
+        );
+      } else {
+        // Add new item to cart with selected quantity
+        return [...prevCart, { productId, quantity }];
+      }
+    });
+
+    
+        displaymessage(productId)
+   
+  };
+
   
 
   const handleAddToCart = (productId) => {
@@ -23,22 +56,9 @@ const Amazon = ({cart,setCart,setCartQuantity,products}) => {
       setCart([...cart, { productId, quantity: 1 }]);
     }
     
-    // if (matchingItem) {
-    //   matchingItem.quantity += 1;
-    // } else {
-    //   setCart([...cart, { productId, quantity: 1 }]);
-    // }
-
-    // let totalQuantity = 0;
-    // cart.map((item) => {
-      
-    //   totalQuantity += item.quantity;
-      
-    // });
-
-    // setCartQuantity(totalQuantity);
-    
-  };
+    displaymessage(productId)
+  
+};
   
   return (
 <>
@@ -71,7 +91,8 @@ const Amazon = ({cart,setCart,setCartQuantity,products}) => {
     </div>
 
     <div className="product-quantity-container">
-      <select>
+      <select 
+                  onChange={(e) => handleQuantityChange(product.id, parseInt(e.target.value))}>
         {[...Array(100)].map((_, index) => (
           <option key={index + 1} value={index + 1}>
             {index + 1}
@@ -82,14 +103,14 @@ const Amazon = ({cart,setCart,setCartQuantity,products}) => {
 
     <div className="product-spacer"></div>
 
-    <div className="added-to-cart">
-      <img src="images/icons/checkmark.png" alt="Added" />
-      Added
-    </div>
+    <div className="added-to-cart" data-product-id={product.id}>
+          <img src="images/icons/checkmark.png" alt="Added" />
+          Added
+        </div>
 
     <button
-     className="add-to-cart-button button-primary js-add-to-cart"
-     onClick={()=>handleAddToCart(product.id)}
+     className={`add-to-cart-button button-primary js-add-to-cart`} 
+     onClick={()=>handleAddToCart(product.id)} data-product-id={product.id}
     >
       Add to Cart
     </button>
@@ -102,5 +123,6 @@ const Amazon = ({cart,setCart,setCartQuantity,products}) => {
 </>
   )
 }
+ 
 
 export default Amazon;
