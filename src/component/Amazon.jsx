@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import '../styles/pages/amazon.css';
 ;
 
-const Amazon = ({cart,setCart,setCartQuantity,products}) => {
+const Amazon = ({cart,setCart,setCartQuantity,products,saveToStorage}) => {
   let timeoutId;
 
   const displaymessage=(productId)=>{
@@ -34,7 +34,7 @@ const Amazon = ({cart,setCart,setCartQuantity,products}) => {
       }
     });
 
-    
+        saveToStorage() 
         displaymessage(productId)
    
   };
@@ -55,10 +55,12 @@ const Amazon = ({cart,setCart,setCartQuantity,products}) => {
       // Add new item to cart with quantity 1
       setCart([...cart, { productId, quantity: 1 }]);
     }
-    
+    saveToStorage()
     displaymessage(productId)
   
 };
+
+
   
   return (
 <>

@@ -4,7 +4,7 @@ import '../styles/pages/checkout/checkout.css'
 import { useEffect } from 'react';
 
 
-const Checkout = ({cart ,cartQuantity,products,setCartQuantity,setCart}) => {
+const Checkout = ({cart ,cartQuantity,products,setCartQuantity,setCart,saveToStorage}) => {
   
   
   
@@ -12,13 +12,14 @@ const Checkout = ({cart ,cartQuantity,products,setCartQuantity,setCart}) => {
     // Update cart quantity when cart items change
     const totalQuantity = cart.reduce((acc, item) => acc + item.quantity, 0);
     setCartQuantity(totalQuantity);
+    saveToStorage()
   }, [cart]);
 
  
   const removeFromCart = (productId) => {
     const newCart = cart.filter(cartItem => cartItem.productId !== productId);
     setCart(newCart);
-    
+    saveToStorage()
   };
 
   return (

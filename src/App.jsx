@@ -666,21 +666,23 @@ function App() {
       "mens"
     ]
   }]);
-  const [cart, setCart] = useState([]);
+  const [cart, setCart] = useState(JSON.parse(localStorage.getItem('cart'))|| []);
   const [cartQuantity, setCartQuantity] = useState(0);
 
- 
+  const saveToStorage=() =>{
+    localStorage.setItem('cart', JSON.stringify(cart));
+  }
   return (
     <>
     <Routes>
       <Route path='/' element={<Layout cartQuantity={cartQuantity}/>}>
           <Route index element={<Amazon cart={cart} setCart={setCart} cartQuantity={cartQuantity} 
-            setCartQuantity={setCartQuantity} products={products}/> }/>
+            setCartQuantity={setCartQuantity} products={products} saveToStorage={saveToStorage}/> }/>
           <Route path='orders' element={<Orders/>}/>
           <Route path='tracking' element={<Tracking/>}/>
       </Route>
       <Route path='checkout' element={<Checkout cart={cart} cartQuantity={cartQuantity}
-        setCartQuantity={setCartQuantity} products={products} setCart={setCart}/>}/>
+        setCartQuantity={setCartQuantity} products={products} setCart={setCart} saveToStorage={saveToStorage}/>}/>
     </Routes>
 </>
   )
