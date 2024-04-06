@@ -4,7 +4,7 @@ import '../styles/pages/checkout/checkout.css'
 import { useEffect } from 'react';
 
 
-const Checkout = ({cart ,cartQuantity,products,setCartQuantity}) => {
+const Checkout = ({cart ,cartQuantity,products,setCartQuantity,setCart}) => {
   
   
   
@@ -15,7 +15,11 @@ const Checkout = ({cart ,cartQuantity,products,setCartQuantity}) => {
   }, [cart]);
 
  
- 
+  const removeFromCart = (productId) => {
+    const newCart = cart.filter(cartItem => cartItem.productId !== productId);
+    setCart(newCart);
+    
+  };
 
   return (
     <>
@@ -43,8 +47,9 @@ const Checkout = ({cart ,cartQuantity,products,setCartQuantity}) => {
 
     <div className="main">
       <div className="page-title">Review your order</div>
-
+    
       <div className="checkout-grid">
+      <div class="order-summary js-order-summary">
         {(!cart || cart.length === 0) ? <p>Your cart is empty.</p> :
         cart.map((item)=>
         
@@ -74,7 +79,7 @@ const Checkout = ({cart ,cartQuantity,products,setCartQuantity}) => {
                   <span className="update-quantity-link link-primary">
                     Update
                   </span>
-                  <span className="delete-quantity-link link-primary">
+                  <span className="delete-quantity-link link-primary" onClick={()=>removeFromCart(item.productId)}>
                     Delete
                   </span>
                 </div>
@@ -87,7 +92,7 @@ const Checkout = ({cart ,cartQuantity,products,setCartQuantity}) => {
 
                 <div className="delivery-option">
                   <input type="radio" className="delivery-option-input"
-                    name="delivery-option-2"/>
+                    name={`delivery-option-${item.productId}`}/>
                   <div>
                     <div className="delivery-option-date">
                       Tuesday, June 21
@@ -99,7 +104,7 @@ const Checkout = ({cart ,cartQuantity,products,setCartQuantity}) => {
                 </div>
                 <div className="delivery-option">
                   <input type="radio" checked className="delivery-option-input"
-                    name="delivery-option-2"/>
+                    name={`delivery-option-${item.productId}`}/>
                   <div>
                     <div className="delivery-option-date">
                       Wednesday, June 15
@@ -111,7 +116,7 @@ const Checkout = ({cart ,cartQuantity,products,setCartQuantity}) => {
                 </div>
                 <div className="delivery-option">
                   <input type="radio" className="delivery-option-input"
-                    name="delivery-option-2"/>
+                    name={`delivery-option-${item.productId}`}/>
                   <div>
                     <div className="delivery-option-date">
                       Monday, June 13
@@ -127,6 +132,7 @@ const Checkout = ({cart ,cartQuantity,products,setCartQuantity}) => {
         
         
 )}
+</div>
         <div className="payment-summary">
           <div className="payment-summary-title">
             Order Summary

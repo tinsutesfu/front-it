@@ -668,17 +668,20 @@ function App() {
   }]);
   const [cart, setCart] = useState([]);
   const [cartQuantity, setCartQuantity] = useState(0);
+
+ 
   return (
     <>
-      <Routes>
+    <Routes>
       <Route path='/' element={<Layout cartQuantity={cartQuantity}/>}>
           <Route index element={<Amazon cart={cart} setCart={setCart} cartQuantity={cartQuantity} 
             setCartQuantity={setCartQuantity} products={products}/> }/>
           <Route path='orders' element={<Orders/>}/>
           <Route path='tracking' element={<Tracking/>}/>
-        </Route>
-        <Route path='checkout' element={<Checkout cart={cart} cartQuantity={cartQuantity} setCartQuantity={setCartQuantity} products={products}/>}/>
-      </Routes>
+      </Route>
+      <Route path='checkout' element={<Checkout cart={cart} cartQuantity={cartQuantity}
+        setCartQuantity={setCartQuantity} products={products} setCart={setCart}/>}/>
+    </Routes>
 </>
   )
 }
