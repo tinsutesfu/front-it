@@ -1,19 +1,16 @@
 import { Link } from 'react-router-dom';
 import '../styles/pages/checkout/checkout-header.css';
 import '../styles/pages/checkout/checkout.css'
-import { useEffect } from 'react';
+import { useState } from 'react';
 
 
-const Checkout = ({cart ,cartQuantity,products,setCartQuantity,setCart,saveToStorage}) => {
+const Checkout = ({cart ,cartQuantity,products,setCart,saveToStorage,updatequantity}) => {
   
+  const [updateModes, setUpdateModes] = useState(
+    cart.reduce((acc, item) => ({ ...acc, [item.productId]: false }), {})
+  );
   
-  
-  useEffect(() => {
-    // Update cart quantity when cart items change
-    const totalQuantity = cart.reduce((acc, item) => acc + item.quantity, 0);
-    setCartQuantity(totalQuantity);
-    saveToStorage()
-  }, [cart]);
+ updatequantity()
 
  
   const removeFromCart = (productId) => {
@@ -22,6 +19,27 @@ const Checkout = ({cart ,cartQuantity,products,setCartQuantity,setCart,saveToSto
     saveToStorage()
   };
 
+  const handleQuantityChange = (productId, event) => {
+    const newQuantity = parseInt(event.target.value);
+    if (isNaN(newQuantity) || newQuantity <= 0) {
+      return; // Handle invalid input (optional: display error message)
+    }
+
+    const updatedCart = cart.map((item) =>
+      item.productId === productId ? { ...item, quantity: newQuantity } : item
+    );
+    setCart(updatedCart);
+    saveToStorage(); // Call saveToStorage here or within a separate function
+  };
+
+  const toggleUpdateMode = (productId) => {
+    setUpdateModes((prevModes) => ({
+      ...prevModes,
+      [productId]: !prevModes[productId],
+    }));
+  };
+
+  
   return (
     <>
     <div className="checkout-header">
@@ -77,9 +95,24 @@ const Checkout = ({cart ,cartQuantity,products,setCartQuantity,setCart,saveToSto
                   <span>
                     Quantity: <span className="quantity-label">{item.quantity}</span>
                   </span>
-                  <span className="update-quantity-link link-primary">
-                    Update
-                  </span>
+                  {updateModes[item.productId] ? (
+                      <form onSubmit={(e) => e.preventDefault()}>
+                        <input
+                          className="quantity-input"
+                          type="number"
+                          min="1" // Set minimum quantity to 1
+                          value={item.quantity}
+                          onChange={(e) => handleQuantityChange(item.productId, e)}
+                        />
+                        <button type="button" className="save-quantity-link link-primary" onClick={() => toggleUpdateMode(item.productId)}>
+                          Save
+                        </button>
+                      </form>
+                    ) : (
+                      <span className="update-quantity-link link-primary" onClick={() => toggleUpdateMode(item.productId)}>
+                        Update
+                      </span>
+                    )}
                   <span className="delete-quantity-link link-primary" onClick={()=>removeFromCart(item.productId)}>
                     Delete
                   </span>

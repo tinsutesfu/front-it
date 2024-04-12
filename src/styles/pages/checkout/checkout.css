@@ -121,6 +121,9 @@ display: grid;
 .product-quantity .link-primary {
   margin-left: 3px;
 }
+.quantity-input{
+  width: 30px;
+}
 
 @media (max-width: 1000px) {
   .delivery-options {

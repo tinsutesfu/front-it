@@ -5,7 +5,7 @@ import Orders from './component/Orders';
 import Tracking from './component/Tracking';
 import Layout from './component/Layout';
 import Amazon from './component/Amazon';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 function App() {
   const [products]=useState([{
@@ -669,20 +669,33 @@ function App() {
   const [cart, setCart] = useState(JSON.parse(localStorage.getItem('cart'))|| []);
   const [cartQuantity, setCartQuantity] = useState(0);
 
+  const updatequantity=()=>{
+    useEffect(() => {
+      // Update cart quantity when cart items change
+      const totalQuantity = cart.reduce((acc, item) => acc + item.quantity, 0);
+      setCartQuantity(totalQuantity);
+      saveToStorage()
+    }, [cart]);
+  }
+
   const saveToStorage=() =>{
     localStorage.setItem('cart', JSON.stringify(cart));
   }
   return (
     <>
     <Routes>
-      <Route path='/' element={<Layout cartQuantity={cartQuantity}/>}>
+      <Route path='/' element={<Layout cartQuantity={cartQuantity} setCartQuantity={setCartQuantity} cart={cart}
+      updatequantity={updatequantity}
+      />}>
           <Route index element={<Amazon cart={cart} setCart={setCart} cartQuantity={cartQuantity} 
             setCartQuantity={setCartQuantity} products={products} saveToStorage={saveToStorage}/> }/>
           <Route path='orders' element={<Orders/>}/>
           <Route path='tracking' element={<Tracking/>}/>
       </Route>
       <Route path='checkout' element={<Checkout cart={cart} cartQuantity={cartQuantity}
-        setCartQuantity={setCartQuantity} products={products} setCart={setCart} saveToStorage={saveToStorage}/>}/>
+        setCartQuantity={setCartQuantity} products={products} setCart={setCart} saveToStorage={saveToStorage}
+        updatequantity={updatequantity}
+        />}/>
     </Routes>
 </>
   )

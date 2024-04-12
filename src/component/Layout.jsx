@@ -1,13 +1,13 @@
 import { Link, Outlet } from 'react-router-dom';
 import '../styles/shared/amazon-header.css';
+import { useEffect } from 'react';
 
 
 
 
-const Layout = ({cartQuantity}) => {
+const Layout = ({cartQuantity,setCartQuantity,updatequantity}) => {
   
-  
-
+ updatequantity()
   return (
     <>
        <div className="amazon-header">
