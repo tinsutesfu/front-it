@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import '../styles/pages/checkout/checkout-header.css';
 import '../styles/pages/checkout/checkout.css'
 import { useState } from 'react';
+import dayjs from 'dayjs'; 
 
 
 const Checkout = ({cart ,cartQuantity,products,setCart,saveToStorage,updatequantity}) => {
@@ -9,6 +10,7 @@ const Checkout = ({cart ,cartQuantity,products,setCart,saveToStorage,updatequant
   const [updateModes, setUpdateModes] = useState(
     cart.reduce((acc, item) => ({ ...acc, [item.productId]: false }), {})
   );
+const [selectedDelivery, setSelectedDelivery] = useState({});
   
  updatequantity()
 
@@ -39,6 +41,43 @@ const Checkout = ({cart ,cartQuantity,products,setCart,saveToStorage,updatequant
     }));
   };
 
+ 
+  
+
+  const handleDeliveryChange = (productId, optionId) => {
+    setSelectedDelivery({ ...selectedDelivery, [productId]: optionId });
+  };
+
+  const selectedDeliveryDays = cart.map(( item) => {
+    const selectedOption = item.deliveryoption?.find(
+      (option) => option.id === selectedDelivery[item.productId]
+    );
+    return selectedOption?.deliveryDays; 
+    
+  } );
+
+
+
+  const totalItemPrice = cart.reduce((acc, item) => {
+    const product = products.find(p => p.id === item.productId);
+    return acc + ((product?.priceCents || 0) / 100) * item.quantity;
+  }, 0);
+
+  // Calculate total shipping cost based on selected delivery option
+  const totalShippingCost = cart.reduce((acc, item) => {
+    const selectedOption = item.deliveryoption?.find(option => option.id === selectedDelivery[item.productId]);
+    return acc + (selectedOption?.priceCents || 0) / 100;
+  }, 0);
+
+  // Calculate subtotal (item price + shipping)
+  const subtotalPrice = totalItemPrice + totalShippingCost;
+
+  // Calculate tax (10% of subtotal)
+  const taxAmount = subtotalPrice * 0.1;
+
+  // Calculate order total (subtotal + tax)
+  const orderTotal = subtotalPrice + taxAmount;
+  
   
   return (
     <>
@@ -70,14 +109,19 @@ const Checkout = ({cart ,cartQuantity,products,setCart,saveToStorage,updatequant
       <div className="checkout-grid">
       <div class="order-summary js-order-summary">
         {(!cart || cart.length === 0) ? <p>Your cart is empty.</p> :
-        cart.map((item)=>
-        
+        cart.map((item,optionId)=>
+         
         
          
           
           <div className="cart-item-container" key={item.productId}>
             <div className="delivery-date">
-              Delivery date: Wednesday, June 15
+               {selectedDeliveryDays[optionId]
+                      ? `Delivery date: ${dayjs().add(selectedDeliveryDays[optionId], 'day').format('dddd, MMMM D')}`
+                      : (
+                        // Display default message if no delivery selected yet
+                        <span>Select a delivery option to see estimated delivery date.</span>
+                      )}
             </div>
 
             <div className="cart-item-details-grid">
@@ -124,42 +168,31 @@ const Checkout = ({cart ,cartQuantity,products,setCart,saveToStorage,updatequant
                   Choose a delivery option:
                 </div>
 
-                <div className="delivery-option">
-                  <input type="radio" className="delivery-option-input"
-                    name={`delivery-option-${item.productId}`}/>
-                  <div>
-                    <div className="delivery-option-date">
-                      Tuesday, June 21
-                    </div>
-                    <div className="delivery-option-price">
-                      FREE Shipping
-                    </div>
+
+                {item.deliveryoption?.map((option) => (
+              <div className="delivery-option" key={option.id}>
+                <input
+                  type="radio"
+                  className="delivery-option-input"
+                  name={`delivery-option-${item.productId}`}
+                  checked={selectedDelivery[item.productId] === option.id}
+                  onChange={() => handleDeliveryChange(item.productId, option.id)}
+                />
+                <div>
+                  <div className="delivery-option-date">
+                    {dayjs().add(option.deliveryDays, 'day').format('dddd, MMMM D')}
+                  </div>
+                  <div className="delivery-option-price">
+                      {option.priceCents === 0 ? (
+                      <span>Free </span>
+                    ) : (
+                      `${(option.priceCents/100)}`
+                    )}-Shipping.
                   </div>
                 </div>
-                <div className="delivery-option">
-                  <input type="radio" checked className="delivery-option-input"
-                    name={`delivery-option-${item.productId}`}/>
-                  <div>
-                    <div className="delivery-option-date">
-                      Wednesday, June 15
-                    </div>
-                    <div className="delivery-option-price">
-                      $4.99 - Shipping
-                    </div>
-                  </div>
-                </div>
-                <div className="delivery-option">
-                  <input type="radio" className="delivery-option-input"
-                    name={`delivery-option-${item.productId}`}/>
-                  <div>
-                    <div className="delivery-option-date">
-                      Monday, June 13
-                    </div>
-                    <div className="delivery-option-price">
-                      $9.99 - Shipping
-                    </div>
-                  </div>
-                </div>
+              </div>
+            ))}
+               
               </div>
             </div>
           </div>
@@ -174,27 +207,27 @@ const Checkout = ({cart ,cartQuantity,products,setCart,saveToStorage,updatequant
 
           <div className="payment-summary-row">
             <div>Items ({cartQuantity}):</div>
-            <div className="payment-summary-money">$42.75</div>
+            <div className="payment-summary-money">${totalItemPrice.toFixed(2)}</div>
           </div>
 
           <div className="payment-summary-row">
             <div>Shipping &amp; handling:</div>
-            <div className="payment-summary-money">$4.99</div>
+            <div className="payment-summary-money">${totalShippingCost.toFixed(2)}</div>
           </div>
 
           <div className="payment-summary-row subtotal-row">
             <div>Total before tax:</div>
-            <div className="payment-summary-money">$47.74</div>
+            <div className="payment-summary-money">${subtotalPrice.toFixed(2)}</div>
           </div>
 
           <div className="payment-summary-row">
             <div>Estimated tax (10%):</div>
-            <div className="payment-summary-money">$4.77</div>
+            <div className="payment-summary-money">${taxAmount.toFixed(2)}</div>
           </div>
 
           <div className="payment-summary-row total-row">
             <div>Order total:</div>
-            <div className="payment-summary-money">$52.51</div>
+            <div className="payment-summary-money">${orderTotal.toFixed(2)}</div>
           </div>
 
           <button className="place-order-button button-primary">
