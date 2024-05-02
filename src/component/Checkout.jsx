@@ -52,8 +52,8 @@ const [selectedDelivery, setSelectedDelivery] = useState({});
     const selectedOption = item.deliveryoption?.find(
       (option) => option.id === selectedDelivery[item.productId]
     );
-    return selectedOption?.deliveryDays; 
-    
+    return selectedOption?.deliveryDays; // Return first found value
+    saveToStorage();
   } );
 
 
@@ -103,7 +103,7 @@ const [selectedDelivery, setSelectedDelivery] = useState({});
       </div>
     </div>
 
-    <div className="main">
+    <div className="maine">
       <div className="page-title">Review your order</div>
     
       <div className="checkout-grid">

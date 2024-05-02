@@ -1,5 +1,8 @@
 .main {
   margin-top: 60px;
+  margin-left: 0;
+  margin-right: 0;
+  padding: 0;
 }
 
 .products-grid {
@@ -31,7 +34,7 @@
    less, we will divide the grid into 6 columns. */
 @media (max-width: 1600px) {
   .products-grid {
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(7, 1fr);
   }
 }
 
