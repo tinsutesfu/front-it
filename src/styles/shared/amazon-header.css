@@ -16,7 +16,9 @@
 }
 
 .amazon-header-left-section {
-  width: 180px;
+  width: 600px;
+  display: flex;
+  align-items: center;
 }
 
 @media (max-width: 800px) {
@@ -57,11 +59,30 @@
     height: 35px;
     margin-top: 5px;
   }
+
+ 
+
 }
+ .navbar-menu {
+    display: flex;
+    list-style: none;
+    gap: 20px;
+    color: grey;
+    font-size: 18px;
+   }
+
+   .navbar-menu .active{
+    border-bottom: 2px solid #b2b2c7;
+    color: whitesmoke;
+  }
+  .navbar-menu li:hover{
+  background-color: rgba(116, 114, 114, 0.8);
+  cursor: pointer;
+  }
 
 .amazon-header-middle-section {
   flex: 1;
-  max-width: 850px;
+  max-width: 350px;
   margin-left: 10px;
   margin-right: 10px;
   display: flex;
@@ -97,10 +118,13 @@
 }
 
 .amazon-header-right-section {
-  width: 180px;
+  width: 350px;
   flex-shrink: 0;
   display: flex;
   justify-content: end;
+  margin-right: 10px;
+  gap: 15px;
+  align-items: center;
 }
 
 .orders-link {
@@ -146,4 +170,19 @@
   
   width: 26px;
   text-align: center;
+
+  
+}
+.sign-text{
+    background: transparent;
+    font-size: 16px;
+    border: 1px solid goldenrod;
+    padding: 10px 30px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: 0.3s;
+    color: white;
+  }
+.sign-text:hover{
+  background-color: gold;
 }

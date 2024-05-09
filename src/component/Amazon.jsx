@@ -1,5 +1,7 @@
 
 import '../styles/pages/amazon.css';
+import Header from './Header';
+
 ;
 
 const Amazon = ({cart,setCart,products,saveToStorage}) => {
@@ -104,6 +106,7 @@ const Amazon = ({cart,setCart,products,saveToStorage}) => {
   
   return (
 <>
+       <Header/>
       <div className="main">
           <div className="products-grid">
 

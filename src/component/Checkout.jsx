@@ -82,7 +82,7 @@ const [selectedDelivery, setSelectedDelivery] = useState({});
   return (
     <>
     <div className="checkout-header">
-      <div className="header-content">
+      <div className="Header-content">
         <div className="checkout-header-left-section">
          
         <Link to="/">

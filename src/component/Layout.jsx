@@ -1,11 +1,12 @@
 import { Link, Outlet } from 'react-router-dom';
 import '../styles/shared/amazon-header.css';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 
 
 
-const Layout = ({cartQuantity,setCartQuantity,updatequantity}) => {
+const Layout = ({cartQuantity,updatequantity}) => {
+  const [menu,setmenu]=useState('home')
   
  updatequantity()
   return (
@@ -18,6 +19,14 @@ const Layout = ({cartQuantity,setCartQuantity,updatequantity}) => {
           <img className="amazon-mobile-logo"
             src="images/amazon-mobile-logo-white.png"/>
         </Link>
+
+        <ul className='navbar-menu'>
+        <li onClick={()=>setmenu('home')} className={menu==='home' ? 'active':''}>home</li>
+        <li onClick={()=>setmenu('menu')} className={menu==='menu' ? 'active':''}>menu</li>
+        <li onClick={()=>setmenu('mobile-app')} className={menu==='mobile-app' ? 'active':''}>mobile-app</li>
+        <li onClick={()=>setmenu('contact us')} className={menu==='contact us' ? 'active':''}>contact us</li>
+       </ul>
+
       </div>
 
       <div className="amazon-header-middle-section">
@@ -29,6 +38,7 @@ const Layout = ({cartQuantity,setCartQuantity,updatequantity}) => {
       </div>
 
       <div className="amazon-header-right-section">
+        
         <Link className="orders-link header-link" to="orders">
           <span className="returns-text">Returns</span>
           <span className="orders-text">& Orders</span>
@@ -38,6 +48,9 @@ const Layout = ({cartQuantity,setCartQuantity,updatequantity}) => {
           <img className="cart-icon" src="images/icons/cart-icon.png"/>
           <div className="cart-quantity">{cartQuantity}</div>
           <div className="cart-text">Cart</div>
+        </Link>
+        <Link >
+          <span className="sign-text">signin</span>
         </Link>
       </div>
     </div>

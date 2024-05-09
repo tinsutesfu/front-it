@@ -6,6 +6,8 @@ import Tracking from './component/Tracking';
 import Layout from './component/Layout';
 import Amazon from './component/Amazon';
 import { useEffect, useState } from 'react';
+import Navbar from './component/Navbar';
+import Home from './component/Home';
 
 function App() {
   const [products]=useState([{
@@ -684,19 +686,25 @@ function App() {
   return (
     <>
     <Routes>
+      {/* <Route path='/' element={<Navbar/>}>
+        <Route index element={<Home cart={cart} setCart={setCart} cartQuantity={cartQuantity} 
+                setCartQuantity={setCartQuantity} products={products} saveToStorage={saveToStorage}/> }/>
+      </Route> */}
       <Route path='/' element={<Layout cartQuantity={cartQuantity} setCartQuantity={setCartQuantity} cart={cart}
-      updatequantity={updatequantity}
-      />}>
-          <Route index element={<Amazon cart={cart} setCart={setCart} cartQuantity={cartQuantity} 
-            setCartQuantity={setCartQuantity} products={products} saveToStorage={saveToStorage}/> }/>
-          <Route path='orders' element={<Orders/>}/>
-          <Route path='tracking' element={<Tracking/>}/>
-      </Route>
+          updatequantity={updatequantity}
+          />}>
+             <Route index  element={<Amazon cart={cart} setCart={setCart} cartQuantity={cartQuantity} 
+                setCartQuantity={setCartQuantity} products={products} saveToStorage={saveToStorage}/> }/> 
+              <Route path='orders' element={<Orders/>}/>
+              <Route path='tracking' element={<Tracking/>}/>
+          </Route>
       <Route path='checkout' element={<Checkout cart={cart} cartQuantity={cartQuantity}
         setCartQuantity={setCartQuantity} products={products} setCart={setCart} saveToStorage={saveToStorage}
         updatequantity={updatequantity}
         />}/>
-    </Routes>
+      
+    </Routes> 
+    
 </>
   )
 }
