@@ -1,147 +1,131 @@
-import { Link } from 'react-router-dom'
-import '../styles/pages/orders.css'
+import { Link, useNavigate } from "react-router-dom";
+import "../styles/pages/orders.css";
+import dayjs from "dayjs";
+import { useContext, useEffect } from "react";
+import { useLocation } from "react-router-dom"; // Added for accessing passed data
 
 const Orders = () => {
+  const location = useLocation();
+  const { cart, selectedDelivery, products, orderTotal, newDeliveryId } =
+    location.state || {}; // Destructure from state
+
+  // No need for the context or updatequantity() function here
+
+  useEffect(() => {
+    console.log("Orders component received cart:", cart);
+    console.log(
+      "Orders component received selectedDelivery:",
+      selectedDelivery
+    );
+  }, [cart, selectedDelivery]);
+
   return (
     <>
-        
-    <div className="main">
-      <div className="page-title">Your Orders</div>
-
-      <div className="orders-grid">
-        <div className="order-container">
-          
-          <div className="order-header">
-            <div className="order-header-left-section">
-              <div className="order-date">
-                <div className="order-header-label">Order Placed:</div>
-                <div>August 12</div>
-              </div>
-              <div className="order-total">
-                <div className="order-header-label">Total:</div>
-                <div>$35.06</div>
-              </div>
-            </div>
-
-            <div className="order-header-right-section">
-              <div className="order-header-label">Order ID:</div>
-              <div>27cba69d-4c3d-4098-b42d-ac7fa62b7664</div>
-            </div>
+      <form className="place-order">
+        <div className="place-order-left">
+          <p className="title">delivery information</p>
+          <div className="multi-field">
+            <input type="text" placeholder="first name" />
+            <input type="text" placeholder="last name" />
           </div>
-
-          <div className="order-details-grid">
-            <div className="product-image-container">
-              <img src="images/products/athletic-cotton-socks-6-pairs.jpg"/>
-            </div>
-
-            <div className="product-details">
-              <div className="product-name">
-                Black and Gray Athletic Cotton Socks - 6 Pairs
-              </div>
-              <div className="product-delivery-date">
-                Arriving on: August 15
-              </div>
-              <div className="product-quantity">
-                Quantity: 1
-              </div>
-              <button className="buy-again-button button-primary">
-                <img className="buy-again-icon" src="images/icons/buy-again.png"/>
-                <span className="buy-again-message">Buy it again</span>
-              </button>
-            </div>
-
-            <div className="product-actions">
-              <Link to="tracking">
-                <button className="track-package-button button-secondary">
-                  Track package
-                </button>
-              </Link>
-            </div>
-
-            <div className="product-image-container">
-              <img src="images/products/adults-plain-cotton-tshirt-2-pack-teal.jpg"/>
-            </div>
-
-            <div className="product-details">
-              <div className="product-name">
-                Adults Plain Cotton T-Shirt - 2 Pack
-              </div>
-              <div className="product-delivery-date">
-                Arriving on: August 19
-              </div>
-              <div className="product-quantity">
-                Quantity: 2
-              </div>
-              <button className="buy-again-button button-primary">
-                <img className="buy-again-icon" src="images/icons/buy-again.png"/>
-                <span className="buy-again-message">Buy it again</span>
-              </button>
-            </div>
-
-            <div className="product-actions">
-              <a href="tracking.html">
-                <button className="track-package-button button-secondary">
-                  Track package
-                </button>
-              </a>
-            </div>
+          <div className="multi-field">
+            <input type="email" placeholder="email address" />
+            <input type="text" placeholder="street" />
+          </div>
+          <div className="multi-field">
+            <input type="text" placeholder="city" />
+            <input type="text" placeholder="state" />
+          </div>
+          <div className="multi-field">
+            <input type="text" placeholder="zip code" />
+            <input type="text" placeholder="country" />
+          </div>
+          <div className="multi-field">
+            <input type="text" placeholder="phone" />
+          </div>
+          <div className="multi-field">
+            <input type="button" value='proceed to payment' className="input-button" />
           </div>
         </div>
 
-        <div className="order-container">
+        <div className="place-order-right">
+          <div className="title"> your order</div>
 
-          <div className="order-header">
-            <div className="order-header-left-section">
-              <div className="order-date">
-                <div className="order-header-label">Order Placed:</div>
-                <div>June 10</div>
+          <div className="orders-grid">
+            <div className="order-header">
+              <div className="order-header-left-section">
+                <div className="order-total">
+                 <span className="order-header-label"> Order total</span>:${orderTotal?.toFixed(2) || 0}
+                  {/* Handle potential undefined orderTotal */}
+                </div>
               </div>
-              <div className="order-total">
-                <div className="order-header-label">Total:</div>
-                <div>$41.90</div>
-              </div>
-            </div>
 
-            <div className="order-header-right-section">
-              <div className="order-header-label">Order ID:</div>
-              <div>b6b6c212-d30e-4d4a-805d-90b52ce6b37d</div>
+              <p className="order-header-right-section">
+                <span className="order-header-label">deliveryID:</span>{newDeliveryId}
+              </p>
             </div>
-          </div>
+            <div className="order-summary js-order-summary">
+              {!cart || cart.length === 0 ? (
+                <p>PLACE YOUR ORDER.</p>
+              ) : (
+                cart.map((item, optionId) => (
+                  <div className="cart-item-container" key={item.productId}>
+                    <div className="delivery-date">
+                      {selectedDelivery[item.productId] ? ( // Use selectedDelivery from props
+                        `Delivery date: ${dayjs()
+                          .add(
+                            // Find the selected delivery option for this item
+                            item.deliveryoption?.find(
+                              (option) =>
+                                option.id === selectedDelivery[item.productId]
+                            )?.deliveryDays,
+                            "day"
+                          )
+                          .format("dddd, MMMM D")}`
+                      ) : (
+                        <span>Delivery option not selected yet.</span>
+                      )}
+                    </div>
 
-          <div className="order-details-grid">
-            <div className="product-image-container">
-              <img src="images/products/intermediate-composite-basketball.jpg"/>
-            </div>
+                    <div className="order-details-grid">
+                      <img
+                        className="product-image"
+                        src={
+                          products.find((p) => p.id === item.productId)?.image
+                        }
+                        alt={
+                          products.find((p) => p.id === item.productId)?.name
+                        } // Added alt text for accessibility
+                      />
 
-            <div className="product-details">
-              <div className="product-name">
-                Intermediate Size Basketball
-              </div>
-              <div className="product-delivery-date">
-                Arriving on: June 17
-              </div>
-              <div className="product-quantity">
-                Quantity: 2
-              </div>
-              <button className="buy-again-button button-primary">
-                <img className="buy-again-icon" src="images/icons/buy-again.png"/>
-                <span className="buy-again-message">Buy it again</span>
-              </button>
+                      <div className="cart-item-details">
+                        <div className="product-name">
+                          {products.find((p) => p.id === item.productId)?.name}
+                        </div>
+                        <div className="product-price">
+                          $
+                          {(
+                            products.find((p) => p.id === item.productId)
+                              ?.priceCents / 100
+                          ).toFixed(2)}
+                        </div>
+                        <div className="product-quantity">
+                          <span className="quantity-label">
+                            Quantity: {item.quantity}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))
+              )}
             </div>
-
-            <div className="product-actions">
-              <a href="tracking.html">
-                <button className="track-package-button button-secondary">
-                  Track package
-                </button>
-              </a>
-            </div>
+           
           </div>
         </div>
-      </div>
-    </div>
-    </ >
-  )
-}
+      </form>
+    </>
+  );
+};
 
-export default Orders
+export default Orders;
