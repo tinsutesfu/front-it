@@ -12,7 +12,8 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 60px;
+  height: 60px; 
+  z-index: 1000;
 }
 
 .amazon-header-left-section {
@@ -67,7 +68,7 @@
     display: flex;
     list-style: none;
     gap: 20px;
-    color: grey;
+    color: gray;
     font-size: 18px;
    }
 
@@ -75,7 +76,10 @@
     border-bottom: 2px solid #b2b2c7;
     color: whitesmoke;
   }
-  .navbar-menu li:hover{
+  .navbar-menu a{
+    text-decoration: none;
+  }
+  .navbar-menu a:hover{
   background-color: rgba(116, 114, 114, 0.8);
   cursor: pointer;
   }
@@ -185,4 +189,82 @@
   }
 .sign-text:hover{
   background-color: gold;
+}
+
+
+
+/* Update the middle section for smaller screens */
+.amazon-header-middle-section {
+  flex: 1;
+  display: flex;
+  justify-content: center; /* Center the search bar */
+  margin: 0 10px; /* Adjust margins */
+}
+
+/* Update the right section for smaller screens */
+.amazon-header-right-section {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px; /* Reduce gap for smaller screens */
+  padding-right: 15px; /* Ensure padding on the right */
+}
+
+/* Media query for devices with width up to 800px */
+@media (max-width: 800px) {
+  .amazon-header {
+    height: auto; /* Adjust height for smaller screens */
+    flex-wrap: wrap; /* Allow items to wrap */
+    padding-top: 10px; /* Add padding at the top */
+    padding-bottom: 10px; /* Add padding at the bottom */
+  }
+
+  .amazon-header-left-section,
+  .amazon-header-middle-section,
+  .amazon-header-right-section {
+    width: 100%; /* Full width for smaller screens */
+    justify-content: center; /* Center content */
+    margin-top: 10px; /* Add margin at the top */
+  }
+
+  .amazon-logo {
+    display: none; /* Hide the desktop logo */
+  }
+
+  .amazon-mobile-logo {
+    display: block; /* Show the mobile logo */
+    height: 35px;
+    margin: auto; /* Center the logo */
+  }
+
+  .search-bar {
+    width: calc(100% - 60px); /* Adjust width for the search button */
+  }
+
+  .search-button {
+    width: 50px; /* Adjust width for the search button */
+    height: 38px; /* Adjust height to match the search bar */
+  }
+
+  .cart-quantity {
+    top: 2px; /* Adjust position for the cart quantity */
+    left: 18px;
+  }
+
+  .sign-text {
+    padding: 8px 20px; /* Adjust padding for the sign-in button */
+    font-size: 14px; /* Adjust font size for the sign-in button */
+  }
+}
+
+/* Additional media query for very small screens */
+@media (max-width: 575px) {
+  .navbar-menu {
+    font-size: 12px; /* Even smaller font size for very small screens */
+  }
+
+  .search-bar,
+  .search-button {
+    height: 34px; /* Adjust height for the search bar and button */
+  }
 }

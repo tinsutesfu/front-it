@@ -5,7 +5,7 @@ const Tracking = () => {
     <>
     
 
-    <div className="main">
+    <div className="main-track">
       <div className="order-tracking">
         <a className="back-to-orders-link link-primary" href="orders.html">
           View all orders
