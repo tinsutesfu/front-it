@@ -5,7 +5,7 @@ const Header = () => {
     <div className='header' id='header'>
       <div className="header-content">
         <h2>order your styling clothes here</h2>
-        <img src={'/images/products/luxury-tower-set-6-piece.jpg'}/>
+        <img src={'/images/laptop.jpg'}/>
         <div className='left'>
         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit dignissimos veniam vero       voluptates      
             iure voluptas consequatur adipisci doloribus soluta nemo magni fuga dolorem architecto quidem voluptate, eaque ipsa modi suscipit.

@@ -1,93 +1,69 @@
-.header {
-    margin-top: 60px;
-    height: 100vh;
-    margin: auto;
-    background-color: #000000;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 0 1600 800'%3E%3Cg %3E%3Cpolygon fill='%23222222' points='800 100 0 200 0 800 1600 800 1600 200'/%3E%3Cpolygon fill='%23444444' points='800 200 0 400 0 800 1600 800 1600 400'/%3E%3Cpolygon fill='%23666666' points='800 300 0 600 0 800 1600 800 1600 600'/%3E%3Cpolygon fill='%23888888' points='1600 800 800 400 0 800'/%3E%3Cpolygon fill='%23aaaaaa' points='1280 800 800 500 320 800'/%3E%3Cpolygon fill='%23cccccc' points='533.3 800 1066.7 800 800 600'/%3E%3Cpolygon fill='%23EEE' points='684.1 800 914.3 800 800 700'/%3E%3C/g%3E%3C/svg%3E");
+/* Base styles */
+body, html {
+    height: 100%;
+    margin: 0;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Parallax effect for header */
+  .header {
+    /* The image used */
+    background-image: url('/images/laptop.jpg');
+  
+    /* Full height */
+    height: 100%;
+  
+    /* Create the parallax scrolling effect */
     background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
     background-size: cover;
-}
-
-.header-content {
-    display: flex;
-    justify-content: space-between;
-    margin-left: 30px;
-    gap: 50px;
-    bottom: 10%;
-    left: 6vw;
-}
-
-.header-content h2 {
-    font-weight: 500;
-    color: gray;
-    font-size: max(4.5vw, 22px);
-}
-
-.header-content img {
-    max-width: 100%;
-    height: 100vh;
-   
-}
-.header-content img:hover {
-    transform: scale(1.067);
-}
-.header-content .left {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 40px;
-}
-
-.header-content .left p {
-    color: gray;
-    font-size: max(1vw, 16px);
-    margin-top: 100px;
-    margin-left: 5px;
-}
-
-.header-content .left button {
+  }
+  
+  /* Style for the header content */
+  .header-content {
+    text-align: center;
+    color: white;
+    padding: 50px;
+  }
+  
+  /* Style for the left-aligned text */
+  .left {
+    text-align: left;
+  }
+  
+  /* Style for the h2 element */
+  .header-content h2 {
+    font-size: 50px;
+  }
+  
+  /* Style for the paragraph */
+  .header-content p {
+    color: #ddd;
+  }
+  
+  /* Style for the button */
+  .header-content button {
     border: none;
-    color: #747474;
-    font-weight: 500;
-    padding: 3vw 7vw;
-    background-color: white;
-    font-size: max(1.5vw, 13px);
-    border-radius: 50px;
-}
-
-.header-content .left button:hover{
-    background-color: black;
-}
-
-/* Media query for devices with width up to 768px */
-@media (max-width: 768px) {
-    .header {
-        margin-top: 180px;
-        height: auto;
-    }
-
-    .header-content {
-        flex-direction: column;
-        align-items: center;
-        margin-left: 0;
-        gap: 20px;
-        bottom: 5%;
-        left: 3vw;
-    }
-
+    outline: none;
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 20px 0;
+    background-color: #333;
+    color: white;
+    cursor: pointer;
+  }
+  
+  /* Responsive styles */
+  @media only screen and (max-width: 600px) {
     .header-content h2 {
-        text-align: center;
-        font-size: max(5.5vw, 18px);
+      font-size: 30px;
     }
-
-    .header-content .left p {
-        text-align: center;
-        font-size: max(4vw, 14px);
-        margin: 20px;
+    .header-content p {
+      font-size: 14px;
     }
-
-    .header-content .left button {
-        padding: 4vw 9vw;
-        font-size: max(3vw, 15px);
+    .header {
+      background-attachment: scroll;
     }
-}
+  }
+  

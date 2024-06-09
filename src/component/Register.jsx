@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
-const REGISTER_URL = '/register';
+const REGISTER_URL = '/api/user/register';
 
 const Register = () => {
     const userRef = useRef();
@@ -18,13 +18,16 @@ const Register = () => {
     const [validName, setValidName] = useState(false);
     const [userFocus, setUserFocus] = useState(false);
 
+    const [email, setemail] = useState('');
+    const [validemail, setValidemail] = useState(false);
+    const [emailFocus, setemailFocus] = useState(false);
+
     const [pwd, setPwd] = useState('');
     const [validPwd, setValidPwd] = useState(false);
     const [pwdFocus, setPwdFocus] = useState(false);
 
-    const [matchPwd, setMatchPwd] = useState('');
-    const [validMatch, setValidMatch] = useState(false);
-    const [matchFocus, setMatchFocus] = useState(false);
+    
+    
 
     const [errMsg, setErrMsg] = useState('');
     const [success, setSuccess] = useState(false);
@@ -35,29 +38,31 @@ const Register = () => {
 
     useEffect(() => {
         setValidName(USER_REGEX.test(user));
+       
     }, [user])
 
     useEffect(() => {
         setValidPwd(PWD_REGEX.test(pwd));
-        setValidMatch(pwd === matchPwd);
-    }, [pwd, matchPwd])
+        
+    }, [pwd])
 
     useEffect(() => {
         setErrMsg('');
-    }, [user, pwd, matchPwd])
+    }, [user,email, pwd])
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         // if button enabled with JS hack
         const v1 = USER_REGEX.test(user);
+        
         const v2 = PWD_REGEX.test(pwd);
-        if (!v1 || !v2) {
+        if (!v1  || !v2) {
             setErrMsg("Invalid Entry");
             return;
         }
         try {
             const response = await axios.post(REGISTER_URL,
-                JSON.stringify({ user, pwd }),
+                JSON.stringify({ user,email, pwd }),
                 {
                     headers: { 'Content-Type': 'application/json' },
                     withCredentials: true
@@ -70,7 +75,7 @@ const Register = () => {
             //clear state and controlled inputs
             setUser('');
             setPwd('');
-            setMatchPwd('');
+           
         } catch (err) {
             if (!err?.response) {
                 setErrMsg('No Server Response');
@@ -123,6 +128,31 @@ const Register = () => {
                         </p>
 
 
+                        <label htmlFor="email">
+                            email:
+                          
+                        </label>
+                        <input className="input"
+                            type="text"
+                            id="email"
+                            ref={userRef}
+                            autoComplete="off"
+                            onChange={(e) => setemail(e.target.value)}
+                            value={email}
+                            required
+                            aria-invalid={validemail ? "false" : "true"}
+                            aria-describedby="uidnote"
+                            onFocus={() => setemailFocus(true)}
+                            onBlur={() => setemailFocus(false)}
+                        />
+                        <p id="enote" className={emailFocus && !validemail ? "instructions" : "offscreen"}>
+                        
+                            4 to 24 characters.<br />
+                            Must begin with a letter.<br />
+                            Letters, numbers, underscores, hyphens allowed.
+                        </p>
+
+
                         <label htmlFor="password">
                             Password:
                             
@@ -145,28 +175,7 @@ const Register = () => {
                             Allowed special characters: <span aria-label="exclamation mark">!</span> <span aria-label="at symbol">@</span> <span aria-label="hashtag">#</span> <span aria-label="dollar sign">$</span> <span aria-label="percent">%</span>
                         </p>
 
-
-                        <label htmlFor="confirm_pwd">
-                            Confirm Password:
-                            
-                        </label>
-                        <input className="input"
-                            type="password"
-                            id="confirm_pwd"
-                            onChange={(e) => setMatchPwd(e.target.value)}
-                            value={matchPwd}
-                            required
-                            aria-invalid={validMatch ? "false" : "true"}
-                            aria-describedby="confirmnote"
-                            onFocus={() => setMatchFocus(true)}
-                            onBlur={() => setMatchFocus(false)}
-                        />
-                        <p id="confirmnote" className={matchFocus && !validMatch ? "instructions" : "offscreen"}>
-                           
-                            Must match the first password input field.
-                        </p>
-
-                        <button className="button" disabled={!validName || !validPwd || !validMatch ? true : false}>Sign Up</button>
+                        <button className="button" disabled={!validName || !validPwd  ? true : false}>Sign Up</button>
                     </form>
                     <p>
                         Already registered?<br />
