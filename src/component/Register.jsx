@@ -7,6 +7,7 @@ import '../styles/pages/login.css'
 import { Link } from "react-router-dom";
 
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
+const EMAIL_REGEX=/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 const REGISTER_URL = '/api/user/register';
 
@@ -38,8 +39,12 @@ const Register = () => {
 
     useEffect(() => {
         setValidName(USER_REGEX.test(user));
-       
-    }, [user])
+       setValidemail(EMAIL_REGEX.test(email))
+    }, [user,email])
+
+    useEffect(() => {
+       setValidemail(EMAIL_REGEX.test(email))
+    }, [email])
 
     useEffect(() => {
         setValidPwd(PWD_REGEX.test(pwd));
@@ -54,9 +59,9 @@ const Register = () => {
         e.preventDefault();
         // if button enabled with JS hack
         const v1 = USER_REGEX.test(user);
-        
+        const v3=EMAIL_REGEX.test(email)
         const v2 = PWD_REGEX.test(pwd);
-        if (!v1  || !v2) {
+        if (!v1 || !v3  || !v2) {
             setErrMsg("Invalid Entry");
             return;
         }
@@ -65,7 +70,7 @@ const Register = () => {
                 JSON.stringify({ user,email, pwd }),
                 {
                     headers: { 'Content-Type': 'application/json' },
-                    withCredentials: true
+                    
                 }
             );
             // TODO: remove console.logs before deployment
@@ -149,7 +154,7 @@ const Register = () => {
                         
                             4 to 24 characters.<br />
                             Must begin with a letter.<br />
-                            Letters, numbers, underscores, hyphens allowed.
+                            Letters, numbers allowed.
                         </p>
 
 
@@ -175,7 +180,7 @@ const Register = () => {
                             Allowed special characters: <span aria-label="exclamation mark">!</span> <span aria-label="at symbol">@</span> <span aria-label="hashtag">#</span> <span aria-label="dollar sign">$</span> <span aria-label="percent">%</span>
                         </p>
 
-                        <button className="button" disabled={!validName || !validPwd  ? true : false}>Sign Up</button>
+                        <button className="button" disabled={!validName || !validemail || !validPwd  ? true : false}>Sign Up</button>
                     </form>
                     <p>
                         Already registered?<br />

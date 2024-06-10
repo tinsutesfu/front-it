@@ -6,7 +6,7 @@ import { datacontect } from '../context/Context.jsx';
 import axios from '../api/axios.js';
 import { Link } from 'react-router-dom';
 
-const LOGIN_URL = '/auth';
+const LOGIN_URL = '/api/user/login';
 
 const Login = () => {
     const { setAuth } = useContext(datacontect);
@@ -34,14 +34,13 @@ const Login = () => {
                 JSON.stringify({ user, pwd }),
                 {
                     headers: { 'Content-Type': 'application/json' },
-                    withCredentials: true
+                    
                 }
             );
             console.log(JSON.stringify(response?.data));
             //console.log(JSON.stringify(response));
             const accessToken = response?.data?.accessToken;
-            const roles = response?.data?.roles;
-            setAuth({ user, pwd, roles, accessToken });
+            setAuth({ user, pwd, accessToken });
             setUser('');
             setPwd('');
             setSuccess(true);
@@ -110,4 +109,4 @@ const Login = () => {
     )
 }
 
-export default Login
+export default Login;
