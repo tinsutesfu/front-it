@@ -1,13 +1,24 @@
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import "../styles/shared/amazon-header.css";
-
-import { useEffect, useState } from "react";
+import { CgProfile } from "react-icons/cg";
+import { FaShoppingBag } from "react-icons/fa";
+import { IoLogOutOutline } from "react-icons/io5";
+import { useContext, useEffect, useState } from "react";
 import Footer from "./Footer";
+import { datacontect } from "../context/Context";
 
 const Layout = ({ cartQuantity, updatequantity }) => {
   const [menu, setmenu] = useState("home");
+  const { token,setToken } = useContext(datacontect);
+  const navigate = useNavigate();
 
+  
   updatequantity();
+  const logout=()=>{
+    localStorage.removeItem('token');
+    setToken('');
+    navigate('/')
+  }
   return (
     <>
       <div className="amazon-header">
@@ -67,9 +78,17 @@ const Layout = ({ cartQuantity, updatequantity }) => {
             <div className="cart-quantity">{cartQuantity}</div>
             <div className="cart-text">Cart</div>
           </Link>
-          <Link to='signin'>
+          {!token? <Link to='signin'>
             <span className="sign-text">signin</span>
-          </Link>
+          </Link>:<div className="navbar-profile">
+          <span className="profile"><CgProfile  /></span>
+          <ul className="profile-dropdown">
+            <li><FaShoppingBag /><p>orders</p></li>
+            <hr/>
+            <li onClick={logout}><IoLogOutOutline /><p>logout</p></li>
+          </ul>
+            </div>}
+         
         </div>
       </div>
       <Outlet />

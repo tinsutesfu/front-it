@@ -1,5 +1,5 @@
 import "../styles/pages/amazon.css";
-
+import axios from "../api/axios";
 import { datacontect } from "../context/Context";
 import { useContext } from "react";
 
@@ -131,8 +131,8 @@ const Amazon = ({ cart, setCart, saveToStorage }) => {
               <div className="product-image-container">
                 <img
                   className="product-image"
-                  src={product.image}
-                  alt={product.name}
+                  src={'http://localhost:3500/images/'+product.image}
+                  alt={product.image}
                 />
               </div>
 
@@ -143,11 +143,11 @@ const Amazon = ({ cart, setCart, saveToStorage }) => {
               <div className="product-rating-container">
                 <img
                   className="product-rating-stars"
-                  src={`images/ratings/rating-${product.rating.stars * 10}.png`}
-                  alt={`Rating: ${product.rating.stars}`}
+                  src={`images/ratings/rating-${product.ratingstars * 10}.png`}
+                  alt={`Rating: ${product.ratingstars}`}
                 />
                 <div className="product-rating-count link-primary">
-                  {product.rating.count}
+                  {product.ratingcount}
                 </div>
               </div>
 

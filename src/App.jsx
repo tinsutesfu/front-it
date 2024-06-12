@@ -56,6 +56,8 @@ function App() {
           />
           <Route path="orders" element={<Orders />} />
           <Route path="tracking" element={<Tracking />} />
+           <Route  path="signin/" element={<Login/>}/>
+        <Route  path="signup/" element={<Register/>}/>
         </Route>
         <Route
           path="checkout"
@@ -70,8 +72,7 @@ function App() {
             />
           }
         />
-        <Route  path="signin/" element={<Login/>}/>
-        <Route  path="signup/" element={<Register/>}/>
+       
         
       </Routes>
     </>

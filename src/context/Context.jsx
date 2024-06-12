@@ -1,5 +1,6 @@
 import { createContext, useEffect, useState } from "react"
 import { products } from "../assets/Data"
+import axios from "../api/axios";
 
 
 
@@ -17,6 +18,8 @@ const Contextprovider = ({children}) => {
   const [updateModes, setUpdateModes] = useState(
     cart.reduce((acc, item) => ({ ...acc, [item.productId]: false }), {})
   );
+  const [token,setToken]=useState('');
+  const [products,setProducts]=useState([])
 
   const updatequantity = () => {
     useEffect(() => {
@@ -90,6 +93,20 @@ const Contextprovider = ({children}) => {
   const saveToStorage = () => {
     localStorage.setItem("cart", JSON.stringify(cart));
   };
+
+  const fetchproduct=async()=>{
+    const response=await axios.get('/api/it/list');
+    setProducts(response.data.data)
+  }
+  useEffect(()=>{
+    async function loaddata(){
+      await fetchproduct();
+    if (localStorage.getItem('token')) {
+      setToken(localStorage.getItem('token'))
+    }
+  }
+  loaddata()
+  },[])
     
   return (
     <datacontect.Provider value={{products, auth, setAuth,cart,selectedDeliveryDays,orderTotal
@@ -99,7 +116,7 @@ const Contextprovider = ({children}) => {
       saveToStorage,
       updatequantity,updateModes, setUpdateModes,removeFromCart,handleQuantityChange,toggleUpdateMode
       ,handleDeliveryChange,selectedDelivery, setSelectedDelivery,totalItemPrice,totalShippingCost
-      ,subtotalPrice,taxAmount
+      ,subtotalPrice,taxAmount,token,setToken
     }}>
       {children}
     </datacontect.Provider>

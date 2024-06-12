@@ -1,10 +1,9 @@
 import { useRef, useState, useEffect } from "react";
 
 
-
 import axios from '../api/axios.js';
 import '../styles/pages/login.css'
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const EMAIL_REGEX=/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
@@ -14,6 +13,8 @@ const REGISTER_URL = '/api/user/register';
 const Register = () => {
     const userRef = useRef();
     const errRef = useRef();
+
+    const navigate = useNavigate();
 
     const [user, setUser] = useState('');
     const [validName, setValidName] = useState(false);
@@ -31,7 +32,7 @@ const Register = () => {
     
 
     const [errMsg, setErrMsg] = useState('');
-    const [success, setSuccess] = useState(false);
+    
 
     useEffect(() => {
         userRef.current.focus();
@@ -39,8 +40,8 @@ const Register = () => {
 
     useEffect(() => {
         setValidName(USER_REGEX.test(user));
-       setValidemail(EMAIL_REGEX.test(email))
-    }, [user,email])
+       
+    }, [user])
 
     useEffect(() => {
        setValidemail(EMAIL_REGEX.test(email))
@@ -69,18 +70,19 @@ const Register = () => {
             const response = await axios.post(REGISTER_URL,
                 JSON.stringify({ user,email, pwd }),
                 {
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 'Content-Type': 'application/json' }
                     
                 }
             );
             // TODO: remove console.logs before deployment
             console.log(JSON.stringify(response?.data));
             //console.log(JSON.stringify(response))
-            setSuccess(true);
+           
             //clear state and controlled inputs
             setUser('');
+            setemail('');
             setPwd('');
-           
+           navigate('/signin')
         } catch (err) {
             if (!err?.response) {
                 setErrMsg('No Server Response');
@@ -96,14 +98,7 @@ const Register = () => {
     return (
         <>
         <div className="app">
-            {success ? (
-                <section>
-                    <h1>Success!</h1>
-                    <p>
-                        <a href="#">Sign In</a>
-                    </p>
-                </section>
-            ) : (
+            
                 <section>
                     <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
                     <h1>Register</h1>
@@ -140,13 +135,13 @@ const Register = () => {
                         <input className="input"
                             type="text"
                             id="email"
-                            ref={userRef}
+                           
                             autoComplete="off"
                             onChange={(e) => setemail(e.target.value)}
                             value={email}
                             required
                             aria-invalid={validemail ? "false" : "true"}
-                            aria-describedby="uidnote"
+                            aria-describedby="enote"
                             onFocus={() => setemailFocus(true)}
                             onBlur={() => setemailFocus(false)}
                         />
@@ -190,7 +185,7 @@ const Register = () => {
                         </span>
                     </p>
                 </section>
-            )}
+            
             </div>
         </>
     )

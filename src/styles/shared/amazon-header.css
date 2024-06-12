@@ -210,6 +210,42 @@
   padding-right: 15px; /* Ensure padding on the right */
 }
 
+.navbar-profile{
+  position: relative;
+}
+.profile-dropdown{
+  position: absolute;
+  display: none;
+  right: 0;
+  z-index: 1;
+}
+.profile{
+  padding: 15px;
+}
+.navbar-profile:hover .profile-dropdown{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background-color: #5e5e5e;
+  padding: 12px 25px;
+  border-radius: 5px;
+  border: 1px solid goldenrod;
+  list-style: none;
+}
+.profile-dropdown li{
+display: flex;
+align-items: center;
+gap: 10px;
+cursor: pointer;
+}
+hr{
+  color: white;
+  height: 1px;
+  width: 100%;
+}
+.profile-dropdown li:hover{
+  background-color: goldenrod;
+}
 /* Media query for devices with width up to 800px */
 @media (max-width: 800px) {
   .amazon-header {

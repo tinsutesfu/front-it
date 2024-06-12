@@ -176,7 +176,7 @@ const filterCartWithDeliverySelection = () => {
                   <div className="cart-item-details-grid">
                     <img
                       className="product-image"
-                      src={products.find((p) => p.id === item.productId)?.image}
+                      src={'http://localhost:3500/images/'+products.find((p) => p.id === item.productId)?.image}
                     />
 
                     <div className="cart-item-details">

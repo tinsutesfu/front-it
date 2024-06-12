@@ -1,22 +1,27 @@
 import { useRef, useState, useEffect, useContext } from 'react';
 import '../styles/pages/login.css'
-
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 
 import { datacontect } from '../context/Context.jsx';
 import axios from '../api/axios.js';
-import { Link } from 'react-router-dom';
+
 
 const LOGIN_URL = '/api/user/login';
 
 const Login = () => {
-    const { setAuth } = useContext(datacontect);
+    const { setAuth,setToken } = useContext(datacontect);
+
+    const navigate = useNavigate();
+    const location = useLocation();
+    const from = location.state?.from?.pathname || "/";
+
     const userRef = useRef();
     const errRef = useRef();
 
     const [user, setUser] = useState('');
     const [pwd, setPwd] = useState('');
     const [errMsg, setErrMsg] = useState('');
-    const [success, setSuccess] = useState(false);
+    
 
     useEffect(() => {
         userRef.current.focus();
@@ -37,13 +42,18 @@ const Login = () => {
                     
                 }
             );
+
+          if (response.data) {
+            setToken(response.data.token);
+            localStorage.setItem('token',response.data.token)
+          }
             console.log(JSON.stringify(response?.data));
             //console.log(JSON.stringify(response));
-            const accessToken = response?.data?.accessToken;
-            setAuth({ user, pwd, accessToken });
+            const token = response?.data?.token;
+            setAuth({ user, pwd, token });
             setUser('');
             setPwd('');
-            setSuccess(true);
+            navigate(from, { replace: true });
         } catch (err) {
             if (!err?.response) {
                 setErrMsg('No Server Response');
@@ -61,15 +71,7 @@ const Login = () => {
     return (
         <>
         <div className='app'>
-            {success ? (
-                <section>
-                    <h1>You are logged in!</h1>
-                    <br />
-                    <p>
-                        <a href="#">Go to Home</a>
-                    </p>
-                </section>
-            ) : (
+           
                 <section >
                     <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
                     <h1>Sign In</h1>
@@ -103,7 +105,7 @@ const Login = () => {
                         </span>
                     </p>
                 </section>
-            )}
+            
             </div>
         </>
     )
