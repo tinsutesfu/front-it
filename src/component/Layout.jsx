@@ -3,13 +3,13 @@ import "../styles/shared/amazon-header.css";
 import { CgProfile } from "react-icons/cg";
 import { FaShoppingBag } from "react-icons/fa";
 import { IoLogOutOutline } from "react-icons/io5";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import Footer from "./Footer";
 import { datacontect } from "../context/Context";
 
-const Layout = ({ cartQuantity, updatequantity }) => {
+const Layout = () => {
   const [menu, setmenu] = useState("home");
-  const { token,setToken } = useContext(datacontect);
+  const { token,setToken,updatequantity,cartQuantity } = useContext(datacontect);
   const navigate = useNavigate();
 
   

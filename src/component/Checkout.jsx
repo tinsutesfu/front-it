@@ -3,21 +3,21 @@ import "../styles/pages/checkout/checkout-header.css";
 import "../styles/pages/checkout/checkout.css";
 import { useContext, useEffect, useState } from "react";
 import dayjs from "dayjs";
+import axios from "../api/axios";
 import { datacontect } from "../context/Context";
 
 const Checkout = ({
-  cart,
-  cartQuantity,
-  setCart,
-  saveToStorage,
-  updatequantity,
+ 
 }) => {
 
   const navigate=useNavigate()
-  const { products } = useContext(datacontect);
-  const [updateModes, setUpdateModes] = useState(
-    cart.reduce((acc, item) => ({ ...acc, [item.productId]: false }), {})
-  );
+  const { products,  cart,token,selectedDeliveryDays,
+  cartQuantity, handleAddToCart,
+  setCart,
+  updatequantity} = useContext(datacontect);
+ // const [updateModes, setUpdateModes] = useState(
+   // cart.reduce((acc, item) => ({ ...acc, [item.productId]: false }), {})
+  //);
   const [selectedDelivery, setSelectedDelivery] = useState(
     // Initialize with delivery selection from local storage
     JSON.parse(localStorage.getItem("selectedDelivery")) || {}
@@ -33,32 +33,31 @@ const Checkout = ({
 
   updatequantity();
 
-  const removeFromCart = (productId) => {
-    const newCart = cart.filter((cartItem) => cartItem.productId !== productId);
-    setCart(newCart);
-    saveToStorage();
-  };
-
-  const handleQuantityChange = (productId, event) => {
-    const newQuantity = parseInt(event.target.value);
-    if (isNaN(newQuantity) || newQuantity <= 0) {
-      return; // Handle invalid input (optional: display error message)
+  const removeFromCart = async (productId) => {
+    // Find the cart item
+    const cartItem = cart.find((item) => item.productId === productId);
+    
+    // Decrease quantity by 1 if more than 1, otherwise remove from cart
+    if (cartItem && cartItem.quantity > 1) {
+      const newCart = cart.map((item) =>
+        item.productId === productId
+          ? { ...item, quantity: item.quantity - 1 }
+          : item
+      );
+      setCart(newCart);
+    } else {
+      const newCart = cart.filter((item) => item.productId !== productId);
+      setCart(newCart);
     }
-
-    const updatedCart = cart.map((item) =>
-      item.productId === productId ? { ...item, quantity: newQuantity } : item
-    );
-    setCart(updatedCart);
-    saveToStorage(); // Call saveToStorage here or within a separate function
+  
+    // Update backend
+    if (token) {
+      await axios.post('/api/cart/remove', { productId }, { headers: { token } });
+    }
   };
+  
 
-  const toggleUpdateMode = (productId) => {
-    setUpdateModes((prevModes) => ({
-      ...prevModes,
-      [productId]: !prevModes[productId],
-    }));
-  };
-
+  
    const handleDeliveryChange = (productId, optionId) => {
     setSelectedDelivery({ ...selectedDelivery, [productId]: optionId });
     // Persist selected delivery option in local storage
@@ -68,22 +67,15 @@ const Checkout = ({
 
   
 
-  const selectedDeliveryDays = cart.map((item) => {
-    const selectedOption = item.deliveryoption?.find(
-      (option) => option.id === selectedDelivery[item.productId] 
-    );
-    return selectedOption?.deliveryDays; // Return first found value
-    
-  });
+ 
 
   
-
-
   const totalItemPrice = cart.reduce((acc, item) => {
-    const product = products.find((p) => p.id === item.productId);
+    const product = products.find((p) => p._id === item.productId);
     return acc + ((product?.priceCents || 0) / 100) * item.quantity;
   }, 0);
 
+  
   // Calculate total shipping cost based on selected delivery option
   const totalShippingCost = cart.reduce((acc, item) => {
     const selectedOption = item.deliveryoption?.find(
@@ -176,52 +168,34 @@ const filterCartWithDeliverySelection = () => {
                   <div className="cart-item-details-grid">
                     <img
                       className="product-image"
-                      src={'http://localhost:3500/images/'+products.find((p) => p.id === item.productId)?.image}
+                      src={'http://localhost:3500/images/'+products.find((p) => p._id === item.productId)?.image}
                     />
 
                     <div className="cart-item-details">
                       <div className="product-name">
-                        {products.find((p) => p.id === item.productId)?.name}
+                        {products.find((p) => p._id === item.productId)?.name}
                       </div>
                       <div className="product-price">
                         $
                         {(
-                          products.find((p) => p.id === item.productId)
+                          products.find((p) => p._id === item.productId)
                             ?.priceCents / 100
                         ).toFixed(2)}
                       </div>
                       <div className="product-quantity">
                         <span>
-                          Quantity:{" "}
+                          Quantity:
                           <span className="quantity-label">
                             {item.quantity}
                           </span>
                         </span>
-                        {updateModes[item.productId] ? (
-                          <form onSubmit={(e) => e.preventDefault()}>
-                            <input
-                              className="quantity-input"
-                              type="number"
-                              min="1" // Set minimum quantity to 1
-                              value={item.quantity}
-                              onChange={(e) =>
-                                handleQuantityChange(item.productId, e)
-                              }
-                            />
-                            <button
-                              type="button"
-                              className="save-quantity-link link-primary"
-                              onClick={() => toggleUpdateMode(item.productId)}>
-                              Save
-                            </button>
-                          </form>
-                        ) : (
+                       
                           <span
-                            className="update-quantity-link link-primary"
-                            onClick={() => toggleUpdateMode(item.productId)}>
+                            className="update-quantity-link link-primary" 
+                            onClick={() => handleAddToCart(item.productId)}>
                             Update
                           </span>
-                        )}
+                        
                         <span
                           className="delete-quantity-link link-primary"
                           onClick={() => removeFromCart(item.productId)}>

@@ -3,8 +3,8 @@ import axios from "../api/axios";
 import { datacontect } from "../context/Context";
 import { useContext } from "react";
 
-const Amazon = ({ cart, setCart, saveToStorage }) => {
-  const { products } = useContext(datacontect);
+const Amazon = ({  saveToStorage }) => {
+  const { products ,cart,setCart,token} = useContext(datacontect);
   let timeoutId;
 
   const displaymessage = (productId) => {
@@ -24,7 +24,7 @@ const Amazon = ({ cart, setCart, saveToStorage }) => {
   
   
 
-  const handleAddToCart = (productId) => {
+  const handleAddToCart =async (productId) => {
     const matchingItem = cart.find((item) => item.productId === productId);
 
     if (matchingItem) {
@@ -66,7 +66,10 @@ const Amazon = ({ cart, setCart, saveToStorage }) => {
         },
       ]);
     }
-    saveToStorage();
+    if (token) {
+      await axios.post('/api/cart/add',{productId},{headers:{token}})
+    }
+    
     displaymessage(productId);
   };
 
@@ -75,7 +78,7 @@ const Amazon = ({ cart, setCart, saveToStorage }) => {
       <div className="main">
         <div className="products-grid">
           {products?.map((product) => (
-            <div className="product-container" key={product.id}>
+            <div className="product-container" key={product._id}>
               <div className="product-image-container">
                 <img
                   className="product-image"
@@ -104,17 +107,17 @@ const Amazon = ({ cart, setCart, saveToStorage }) => {
                 ${(product.priceCents / 100).toFixed(2)}
               </div>
 
-             
+              <div className="product-spacer"></div>
 
-              <div className="added-to-cart" data-product-id={product.id}>
+              <div className="added-to-cart" data-product-id={product._id}>
                 <img src="images/icons/checkmark.png" alt="Added" />
                 Added
               </div>
 
               <button
                 className={`add-to-cart-button button-primary js-add-to-cart`}
-                onClick={() => handleAddToCart(product.id)}
-                data-product-id={product.id}
+                onClick={() => handleAddToCart(product._id)}
+                data-product-id={product._id}
               >
                 Add to Cart
               </button>
