@@ -1,29 +1,62 @@
+import { useContext, useEffect, useState } from 'react'
 import '../styles/pages/tracking.css'
+import { datacontext } from '../context/Context';
+import axios from "../api/axios";
+import Orders from './Orders';
 
 const Tracking = () => {
+  const {token}=useContext(datacontext)
+  const [data,setdata]=useState([]);
+
+  const fetchorder=async()=>{
+const response=await axios.post('/api/place/userorder',{},{headers:{token}});
+setdata(response.data.data);
+console.log(response.data)
+  }
+
+  useEffect(()=>{
+    if (token) {
+      fetchorder()
+    }
+  },[token])
   return (
     <>
-    
+     
 
-    <div className="main-track">
-      <div className="order-tracking">
-        <a className="back-to-orders-link link-primary" href="orders.html">
-          View all orders
-        </a>
+    <div className="my-orders">
+      
+        <h2>
+          my orders</h2>
+        
 
-        <div className="delivery-date">
+      
+
+        <div className="container">
+         {data.map((order,index)=>{
+          return(
+            <div key={index} className="myorders-order">
+<img src='images/lap.del.jpg'/>
+<p>{order.items.map((item,index)=>{
+  if (index===order.items.length-1) {
+    return item.productId +'x'+item.quantity
+  } else {
+    return item.productId +'x'+item.quantity+','
+  }
+})}</p>
+<p>{order.amount}.00</p>
+<p>items:{order.items.length}</p>
+<p><span>&#x25cf;</span>{order.status}</p>
+<button>track order</button>
+            </div>
+          )
+         })}
+        </div>
+
+      
+
+         <div className="delivery-date">
           Arriving on Monday, June 13
         </div>
-
-        <div className="product-info">
-          Black and Gray Athletic Cotton Socks - 6 Pairs
-        </div>
-
-        <div className="product-info">
-          Quantity: 1
-        </div>
-
-        <img className="product-image" src="images/products/athletic-cotton-socks-6-pairs.jpg"/>
 
         <div className="progress-labels-container">
           <div className="progress-label">
@@ -41,7 +74,7 @@ const Tracking = () => {
           <div className="progress-bar"></div>
         </div>
       </div>
-    </div>
+    
     </>
   )
 }

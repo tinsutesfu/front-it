@@ -5,11 +5,11 @@ import { FaShoppingBag } from "react-icons/fa";
 import { IoLogOutOutline } from "react-icons/io5";
 import { useContext, useState } from "react";
 import Footer from "./Footer";
-import { datacontect } from "../context/Context";
+import { datacontext } from "../context/Context";
 
 const Layout = () => {
   const [menu, setmenu] = useState("home");
-  const { token,setToken,updatequantity,cartQuantity } = useContext(datacontect);
+  const { token,setToken,updatequantity,cartQuantity } = useContext(datacontext);
   const navigate = useNavigate();
 
   
@@ -69,8 +69,8 @@ const Layout = () => {
 
         <div className="amazon-header-right-section">
           <Link className="orders-link header-link" to="orders">
-            <span className="returns-text">Returns</span>
-            <span className="orders-text">& Orders</span>
+            
+            <span className="orders-text"> Orders</span>
           </Link>
 
           <Link className="cart-link header-link" to="checkout">
@@ -83,7 +83,7 @@ const Layout = () => {
           </Link>:<div className="navbar-profile">
           <span className="profile"><CgProfile  /></span>
           <ul className="profile-dropdown">
-            <li><FaShoppingBag /><p>orders</p></li>
+            <li onClick={()=>navigate('tracking')}><FaShoppingBag /><p>myorders</p></li>
             <hr/>
             <li onClick={logout}><IoLogOutOutline /><p>logout</p></li>
           </ul>

@@ -4,7 +4,7 @@ import "../styles/pages/checkout/checkout.css";
 import { useContext, useEffect, useState } from "react";
 import dayjs from "dayjs";
 import axios from "../api/axios";
-import { datacontect } from "../context/Context";
+import { datacontext } from "../context/Context";
 
 const Checkout = ({
  
@@ -14,7 +14,7 @@ const Checkout = ({
   const { products,  cart,token,selectedDeliveryDays,
   cartQuantity, handleAddToCart,
   setCart,
-  updatequantity} = useContext(datacontect);
+  updatequantity} = useContext(datacontext);
  // const [updateModes, setUpdateModes] = useState(
    // cart.reduce((acc, item) => ({ ...acc, [item.productId]: false }), {})
   //);
@@ -94,13 +94,14 @@ const Checkout = ({
   const orderTotal = subtotalPrice + taxAmount;
 
   
+  
   const generateUniqueDeliveryId = () => {
     return (
       Math.random().toString(36).substring(2, 15) +
       Math.abs(Date.now()).toString(36).substring(2)
     );
   };
-  const newDeliveryId = generateUniqueDeliveryId();
+  const deliveryId = generateUniqueDeliveryId();
 
 const filterCartWithDeliverySelection = () => {
     // Filter cart items based on selected delivery options
@@ -112,7 +113,7 @@ const filterCartWithDeliverySelection = () => {
 
   const handlePlaceOrder = () => {
     const filteredCart = filterCartWithDeliverySelection();
-    navigate('/orders', { state: { cart: filteredCart, selectedDelivery,products,orderTotal,newDeliveryId } });
+    navigate('/orders', { state: { cart: filteredCart, selectedDelivery,products,orderTotal,deliveryId } });
   };
   return (
     <>

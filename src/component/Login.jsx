@@ -2,14 +2,14 @@ import { useRef, useState, useEffect, useContext } from 'react';
 import '../styles/pages/login.css'
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 
-import { datacontect } from '../context/Context.jsx';
+import { datacontext } from '../context/Context.jsx';
 import axios from '../api/axios.js';
 
 
 const LOGIN_URL = '/api/user/login';
 
 const Login = () => {
-    const { setAuth,setToken } = useContext(datacontect);
+    const { setAuth,setToken } = useContext(datacontext);
 
     const navigate = useNavigate();
     const location = useLocation();

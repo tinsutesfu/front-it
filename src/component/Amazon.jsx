@@ -1,10 +1,10 @@
 import "../styles/pages/amazon.css";
 import axios from "../api/axios";
-import { datacontect } from "../context/Context";
+import { datacontext } from "../context/Context";
 import { useContext } from "react";
 
 const Amazon = ({  saveToStorage }) => {
-  const { products ,cart,setCart,token} = useContext(datacontect);
+  const { products ,cart,setCart,token} = useContext(datacontext);
   let timeoutId;
 
   const displaymessage = (productId) => {

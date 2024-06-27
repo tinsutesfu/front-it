@@ -9,6 +9,7 @@ import Amazon from "./component/Amazon";
 import Header from "./component/Header";
 import Login from "./component/Login";
 import Register from "./component/Register";
+import { Verify } from "./component/Verify";
 
 function App() {
   return (
@@ -16,9 +17,10 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Header />} />
-          <Route path="amazon" element={<Amazon />} />
+          <Route path="amazon/" element={<Amazon />} />
           <Route path="orders" element={<Orders />} />
-          <Route path="tracking" element={<Tracking />} />
+          
+          <Route path="tracking/" element={<Tracking />} />
           <Route path="signin/" element={<Login />} />
           <Route path="signup/" element={<Register />} />
         </Route>

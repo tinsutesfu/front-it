@@ -5,7 +5,7 @@ import axios from "../api/axios";
 
 
 
-export const datacontect=createContext(null)
+export const datacontext=createContext(null)
 
 const Contextprovider = ({children}) => {
   const [auth, setAuth] = useState({});
@@ -170,7 +170,7 @@ const getCartData = async (token) => {
   
     
   return (
-    <datacontect.Provider value={{products, auth, setAuth,cart,selectedDeliveryDays
+    <datacontext.Provider value={{products, auth, setAuth,cart,selectedDeliveryDays
       ,cartQuantity,handleAddToCart,
       setCartQuantity,
       setCart,
@@ -180,7 +180,7 @@ const getCartData = async (token) => {
       ,token,setToken
     }}>
       {children}
-    </datacontect.Provider>
+    </datacontext.Provider>
   )
 }
 
