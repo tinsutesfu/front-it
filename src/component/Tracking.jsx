@@ -46,7 +46,7 @@ console.log(response.data)
 <p>{order.amount}.00</p>
 <p>items:{order.items.length}</p>
 <p><span>&#x25cf;</span>{order.status}</p>
-<button>track order</button>
+<button onClick={fetchorder}>track order</button>
             </div>
           )
          })}

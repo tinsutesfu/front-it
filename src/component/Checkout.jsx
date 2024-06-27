@@ -121,7 +121,7 @@ const filterCartWithDeliverySelection = () => {
         <div className="Header-content">
           <div className="checkout-header-left-section">
             <Link to="/amazon">
-              <img className="amazon-logo" src="images/amazon-logo.png" />
+              <img className="amazon-logo" src="images/t-logo.jpg" />
               <img
                 className="amazon-mobile-logo"
                 src="images/amazon-mobile-logo.png"

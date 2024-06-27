@@ -24,7 +24,7 @@ const Layout = () => {
       <div className="amazon-header">
         <div className="amazon-header-left-section">
           <Link to="amazon" className="header-link">
-            <img className="amazon-logo" src="images/amazon-logo-white.png" />
+            <img className="amazon-logo" src="images/t-logo.jpg" />
             <img
               className="amazon-mobile-logo"
               src="images/amazon-mobile-logo-white.png"
