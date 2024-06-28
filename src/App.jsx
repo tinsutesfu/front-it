@@ -9,15 +9,26 @@ import Amazon from "./component/Amazon";
 import Header from "./component/Header";
 import Login from "./component/Login";
 import Register from "./component/Register";
-import { Verify } from "./component/Verify";
+import { datacontext } from "./context/Context";
+import { useContext, useEffect, useState } from "react";
 
 function App() {
+  const { products } = useContext(datacontext);
+  const [search, setSearch] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+
+  useEffect(() => {
+    const filteredResults =products.filter((product) =>
+      ((product.name).toLowerCase()).includes(search.toLowerCase()));
+
+    setSearchResults(filteredResults);
+  }, [products, search])
   return (
     <>
       <Routes>
-        <Route path="/" element={<Layout />}>
+        <Route path="/" element={<Layout search={search} setSearch={setSearch}/>}>
           <Route index element={<Header />} />
-          <Route path="amazon/" element={<Amazon />} />
+          <Route path="amazon/" element={<Amazon products={searchResults} />} />
           <Route path="orders" element={<Orders />} />
           
           <Route path="tracking/" element={<Tracking />} />

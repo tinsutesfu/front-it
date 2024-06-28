@@ -1,18 +1,31 @@
 import { Link, Outlet, useNavigate } from "react-router-dom";
-import "../styles/shared/amazon-header.css";
+import "../styles/shared/layout.css";
 import { CgProfile } from "react-icons/cg";
 import { FaShoppingBag } from "react-icons/fa";
 import { IoLogOutOutline } from "react-icons/io5";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import Footer from "./Footer";
 import { datacontext } from "../context/Context";
 
-const Layout = () => {
+const Layout = ({search,setSearch}) => {
   const [menu, setmenu] = useState("home");
-  const { token,setToken,updatequantity,cartQuantity } = useContext(datacontext);
+  const searchRef = useRef(null);
+  const [searchInput, setSearchInput] = useState(null);
+  const { token,setToken,updatequantity,cartQuantity} = useContext(datacontext);
   const navigate = useNavigate();
 
+
   
+  useEffect(() => {
+    setSearchInput(searchRef.current);
+  }, []);
+
+  const clearSearchInput = () => {
+    if (searchInput) {
+      searchInput.value = '';
+    }
+  };
+
   updatequantity();
   const logout=()=>{
     localStorage.removeItem('token');
@@ -24,11 +37,8 @@ const Layout = () => {
       <div className="amazon-header">
         <div className="amazon-header-left-section">
           <Link to="amazon" className="header-link">
-            <img className="amazon-logo" src="images/t-logo.jpg" />
-            <img
-              className="amazon-mobile-logo"
-              src="images/amazon-mobile-logo-white.png"
-            />
+            <img className="amazon-logo" src="images/t-zon.jpg" />
+            
           </Link>
 
           <ul className="navbar-menu">
@@ -38,18 +48,12 @@ const Layout = () => {
               className={menu === "home" ? "active" : ""}>
               home
             </Link>
-            <a
-              href="#explore"
+            <Link
+              to="amazon"
               onClick={() => setmenu("menu")}
               className={menu === "menu" ? "active" : ""}>
               menu
-            </a>
-            <a
-              href="#"
-              onClick={() => setmenu("mobile-app")}
-              className={menu === "mobile-app" ? "active" : ""}>
-              mobile-app
-            </a>
+            </Link>
             <a
               href="#footer"
               onClick={() => setmenu("contact us")}
@@ -59,18 +63,19 @@ const Layout = () => {
           </ul>
         </div>
 
-        <div className="amazon-header-middle-section">
-          <input className="search-bar" type="text" placeholder="Search" />
+        <form className="amazon-header-middle-section" onSubmit={(e) => e.preventDefault()}>
+          <input className="search-bar" id="search" type="text" placeholder="Search product" value={search} onChange={(e) => setSearch(e.target.value)}
+            ref={searchRef}/>
 
-          <button className="search-button">
+          <button className="search-button"  onClick={clearSearchInput}>
             <img className="search-icon" src="images/icons/search-icon.png" />
           </button>
-        </div>
+        </form>
 
         <div className="amazon-header-right-section">
           <Link className="orders-link header-link" to="orders">
             
-            <span className="orders-text"> Orders</span>
+            <span className="orders-text">checkout</span>
           </Link>
 
           <Link className="cart-link header-link" to="checkout">

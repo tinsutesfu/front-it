@@ -3,8 +3,8 @@ import axios from "../api/axios";
 import { datacontext } from "../context/Context";
 import { useContext } from "react";
 
-const Amazon = ({  saveToStorage }) => {
-  const { products ,cart,setCart,token} = useContext(datacontext);
+const Amazon = ({products}) => {
+  const {cart,setCart,token} = useContext(datacontext);
   let timeoutId;
 
   const displaymessage = (productId) => {
@@ -88,8 +88,12 @@ const Amazon = ({  saveToStorage }) => {
                 />
               </div>
 
-              <div className="product-name limit-text-to-2-lines">
-                {product.name}
+              <div className="product-name">
+                <span className="product-name-text" title={product.name}>
+                  {product.name.length <= 25
+                    ? product.name
+                    : `${product.name.slice(0, 25)}...`}
+                </span>
               </div>
 
               <div className="product-rating-container">

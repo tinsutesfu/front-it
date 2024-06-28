@@ -7,33 +7,36 @@ const Footer = () => {
     <div className='footer' id='footer'>
         <div className="foter-content">
             <div className="footer-content-left">
-                <img src={'/images/t-logo.jpg'}/>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Harum omnis saepe possimus temporibus quasi tempore, provident, fugiat explicabo sint, aliquid dolorem ad et optio nulla quaerat numquam. Ut, dignissimos voluptatum?</p>
+                <img src={'/images/t-zon.jpg'}/>
+                <p>Stay stylish and productive with Tinsae. Explore our curated collection of high-performance laptops that elevate your everyday computing experience. Shop now and unlock your potential.</p>
+
                 <div className="footer-social-icons">
-                    <span>{<TiSocialFacebook />} </span>
-                    <span> {<TiSocialLinkedin/>}</span>
-                    <span> {<TiSocialGithub/>} </span>
-                </div>
+  <span><a href="https://www.facebook.com/tinsaye tesfaye"><TiSocialFacebook /></a></span>
+  <span><a href="https://www.linkedin.com/company/your-linkedin-company"><TiSocialLinkedin /></a></span>
+  <span><a href="https://github.com/tinsutesfu"><TiSocialGithub /></a></span>
+</div>
+
             </div>
             <div className="footer-content-middle">
-                <h2>company</h2>
-                <ul>
-                    <li>home</li>
-                    <li>delivery</li>
-                    <li>about us</li>
-                    <li>privacy policy</li>
-                </ul>
-            </div>
+  <h2>Company</h2>
+  <ul>
+    <li><a href="/">home</a></li>
+    <li><a href="/about">About Us</a></li>
+    <li><a href="/delivery">Delivery Info</a></li>
+    <li><a href="/privacy">Privacy Policy</a></li>
+  </ul>
+</div>
             <div className="footer-content-right">
                 <h2>get in touch</h2>
                 <ul>
                     <li>+251-9 40 13 78 55</li>
-                    <li>mechuriachn@gmail.com</li>
+                    <li>yetesfayes@gmail.com</li>
                 </ul>
             </div>
         </div>
         <hr/>
-        <p >copyright2024 @ tinsu.com-allrights reserved</p>
+        <p>Copyright © 2024 Tinsae Laptops. All Rights Reserved.</p>
+
     </div>
   )
 }

@@ -16,6 +16,7 @@
 }
 .foter-content img{
     width:100px ;
+    border-radius: 50%;
 }
 .footer-content-left,.footer-content-middle,.footer-content-right{
     display: flex;
