@@ -34,8 +34,9 @@ function App() {
           <Route path="tracking/" element={<Tracking />} />
           <Route path="signin/" element={<Login />} />
           <Route path="signup/" element={<Register />} />
+       
+        <Route path="checkout" element={<Checkout />} /> 
         </Route>
-        <Route path="checkout" element={<Checkout />} />
       </Routes>
     </>
   );

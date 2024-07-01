@@ -1,10 +1,12 @@
 import "../styles/pages/amazon.css";
 import axios from "../api/axios";
 import { datacontext } from "../context/Context";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Amazon = ({products}) => {
   const {cart,setCart,token} = useContext(datacontext);
+  const navigate=useNavigate()
   let timeoutId;
 
   const displaymessage = (productId) => {
@@ -21,6 +23,13 @@ const Amazon = ({products}) => {
     }, 2000);
   };
 
+  useEffect(()=>{
+    if (!token ) {
+      navigate('/signin')
+    } else  {
+      navigate('/amazon')
+    } 
+  },[token])
   
   
 
@@ -119,9 +128,9 @@ const Amazon = ({products}) => {
               </div>
 
               <button
-                className={`add-to-cart-button button-primary js-add-to-cart`}
+                className='add-to-cart-button button-primary '
                 onClick={() => handleAddToCart(product._id)}
-                data-product-id={product._id}
+                
               >
                 Add to Cart
               </button>

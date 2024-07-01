@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect } from "react";
-
+import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import axios from '../api/axios.js';
 import '../styles/pages/login.css'
@@ -104,7 +105,8 @@ const Register = () => {
                     <h1>Register</h1>
                     <form className="form" onSubmit={handleSubmit}>
                         <label htmlFor="username">
-                            Username:
+                            Username: <FontAwesomeIcon icon={faCheck} className={validName ? "valid" : "hide"} />
+                            <FontAwesomeIcon icon={faTimes} className={validName || !user ? "hide" : "invalid"} />
                           
                         </label>
                         <input className="input"
@@ -130,7 +132,8 @@ const Register = () => {
 
                         <label htmlFor="email">
                             email:
-                          
+                            <FontAwesomeIcon icon={faCheck} className={validemail ? "valid" : "hide"} />
+                            <FontAwesomeIcon icon={faTimes} className={validemail || !email ? "hide" : "invalid"} />
                         </label>
                         <input className="input"
                             type="text"
@@ -155,7 +158,8 @@ const Register = () => {
 
                         <label htmlFor="password">
                             Password:
-                            
+                            <FontAwesomeIcon icon={faCheck} className={validPwd ? "valid" : "hide"} />
+                            <FontAwesomeIcon icon={faTimes} className={validPwd || !pwd ? "hide" : "invalid"} />
                         </label>
                         <input className="input"
                             type="password"

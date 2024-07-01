@@ -1,7 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/pages/orders.css";
 import dayjs from "dayjs";
-import Modal from 'react-modal';
 import axios from "../api/axios";
 import { useContext, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom"; // Added for accessing passed data
@@ -76,14 +75,14 @@ try {
 }
 };
 
+
 useEffect(()=>{
   if (!token ) {
     navigate('/signin')
   } else if (orderTotal===0) {
     navigate('/amazon')
   } 
-},[token])
-
+},[token,orderTotal])
 
   return (
     <>
@@ -141,7 +140,7 @@ useEffect(()=>{
                             // Find the selected delivery option for this item
                             item.deliveryoption?.find(
                               (option) =>
-                                option._id === selectedDelivery[item.productId]
+                                option.id === selectedDelivery[item.productId]
                             )?.deliveryDays,
                             "day"
                           )

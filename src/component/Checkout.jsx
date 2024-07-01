@@ -6,37 +6,36 @@ import dayjs from "dayjs";
 import axios from "../api/axios";
 import { datacontext } from "../context/Context";
 
-const Checkout = ({
- 
-}) => {
-
-  const navigate=useNavigate()
-  const { products,  cart,token,selectedDeliveryDays,
-  cartQuantity, handleAddToCart,
-  setCart,
-  updatequantity} = useContext(datacontext);
- // const [updateModes, setUpdateModes] = useState(
-   // cart.reduce((acc, item) => ({ ...acc, [item.productId]: false }), {})
+const Checkout = ({}) => {
+  const navigate = useNavigate();
+  const {
+    products,
+    cart,
+    token,
+    cartQuantity,
+    handleAddToCart,
+    setCart,
+    updatequantity,
+  } = useContext(datacontext);
+  // const [updateModes, setUpdateModes] = useState(
+  // cart.reduce((acc, item) => ({ ...acc, [item.productId]: false }), {})
   //);
-  const [selectedDelivery, setSelectedDelivery] = useState(
-    // Initialize with delivery selection from local storage
-    JSON.parse(localStorage.getItem("selectedDelivery")) || {}
-  );
+  const [selectedDelivery, setSelectedDelivery] = useState({});
 
   useEffect(() => {
-    // Save selected delivery options to local storage on change
-    localStorage.setItem("selectedDelivery", JSON.stringify(selectedDelivery));
-  }, [selectedDelivery]);
-
- 
- 
+    if (!token) {
+      navigate("/signin");
+    } else if (orderTotal === 0) {
+      navigate("/amazon");
+    }
+  }, [token]);
 
   updatequantity();
 
   const removeFromCart = async (productId) => {
     // Find the cart item
     const cartItem = cart.find((item) => item.productId === productId);
-    
+
     // Decrease quantity by 1 if more than 1, otherwise remove from cart
     if (cartItem && cartItem.quantity > 1) {
       const newCart = cart.map((item) =>
@@ -49,33 +48,33 @@ const Checkout = ({
       const newCart = cart.filter((item) => item.productId !== productId);
       setCart(newCart);
     }
-  
+
     // Update backend
     if (token) {
-      await axios.post('/api/cart/remove', { productId }, { headers: { token } });
+      await axios.post(
+        "/api/cart/remove",
+        { productId },
+        { headers: { token } }
+      );
     }
   };
-  
 
-  
-   const handleDeliveryChange = (productId, optionId) => {
+  const handleDeliveryChange = (productId, optionId) => {
     setSelectedDelivery({ ...selectedDelivery, [productId]: optionId });
-    // Persist selected delivery option in local storage
-    localStorage.setItem(`selectedDelivery-${productId}`, JSON.stringify(optionId));
   };
 
+  const selectedDeliveryDays = cart.map((item) => {
+    const selectedOption = item.deliveryoption?.find(
+      (option) => option.id === selectedDelivery[item.productId]
+    );
+    return selectedOption?.deliveryDays; // Return first found value
+  });
 
-  
-
- 
-
-  
   const totalItemPrice = cart.reduce((acc, item) => {
     const product = products.find((p) => p._id === item.productId);
     return acc + ((product?.priceCents || 0) / 100) * item.quantity;
   }, 0);
 
-  
   // Calculate total shipping cost based on selected delivery option
   const totalShippingCost = cart.reduce((acc, item) => {
     const selectedOption = item.deliveryoption?.find(
@@ -93,8 +92,6 @@ const Checkout = ({
   // Calculate order total (subtotal + tax)
   const orderTotal = subtotalPrice + taxAmount;
 
-  
-  
   const generateUniqueDeliveryId = () => {
     return (
       Math.random().toString(36).substring(2, 15) +
@@ -103,7 +100,7 @@ const Checkout = ({
   };
   const deliveryId = generateUniqueDeliveryId();
 
-const filterCartWithDeliverySelection = () => {
+  const filterCartWithDeliverySelection = () => {
     // Filter cart items based on selected delivery options
     const filteredCart = cart.filter(
       (item) => selectedDelivery[item.productId] !== undefined
@@ -113,7 +110,15 @@ const filterCartWithDeliverySelection = () => {
 
   const handlePlaceOrder = () => {
     const filteredCart = filterCartWithDeliverySelection();
-    navigate('/orders', { state: { cart: filteredCart, selectedDelivery,products,orderTotal,deliveryId } });
+    navigate("/orders", {
+      state: {
+        cart: filteredCart,
+        selectedDelivery,
+        products,
+        orderTotal,
+        deliveryId,
+      },
+    });
   };
   return (
     <>
@@ -121,7 +126,7 @@ const filterCartWithDeliverySelection = () => {
         <div className="Header-content">
           <div className="checkout-header-left-section">
             <Link to="/amazon">
-              <img className="amazon-logo" src="images/t-logo.jpg" />
+              <img className="amazon-logo" src="images/t-zon.jpg" />
               <img
                 className="amazon-mobile-logo"
                 src="images/amazon-mobile-logo.png"
@@ -130,11 +135,7 @@ const filterCartWithDeliverySelection = () => {
           </div>
 
           <div className="checkout-header-middle-section">
-            Checkout (
-            <Link className="return-to-home-link" to="/amazon">
-              {cartQuantity} items
-            </Link>
-            )
+            cartQuantity ({cartQuantity} items )
           </div>
 
           <div className="checkout-header-right-section">
@@ -169,7 +170,10 @@ const filterCartWithDeliverySelection = () => {
                   <div className="cart-item-details-grid">
                     <img
                       className="product-image"
-                      src={'http://localhost:3500/images/'+products.find((p) => p._id === item.productId)?.image}
+                      src={
+                        "http://localhost:3500/images/" +
+                        products.find((p) => p._id === item.productId)?.image
+                      }
                     />
 
                     <div className="cart-item-details">
@@ -190,16 +194,18 @@ const filterCartWithDeliverySelection = () => {
                             {item.quantity}
                           </span>
                         </span>
-                       
-                          <span
-                            className="update-quantity-link link-primary" 
-                            onClick={() => handleAddToCart(item.productId)}>
-                            Update
-                          </span>
-                        
+
+                        <span
+                          className="update-quantity-link link-primary"
+                          onClick={() => handleAddToCart(item.productId)}
+                        >
+                          Update
+                        </span>
+
                         <span
                           className="delete-quantity-link link-primary"
-                          onClick={() => removeFromCart(item.productId)}>
+                          onClick={() => removeFromCart(item.productId)}
+                        >
                           Delete
                         </span>
                       </div>
@@ -207,7 +213,7 @@ const filterCartWithDeliverySelection = () => {
 
                     <div className="delivery-options">
                       <div className="delivery-options-title">
-                        Choose a delivery option:
+                        delivery option with price:
                       </div>
 
                       {item.deliveryoption?.map((option) => (
@@ -284,8 +290,11 @@ const filterCartWithDeliverySelection = () => {
               </div>
             </div>
 
-            <button onClick={handlePlaceOrder} className="place-order-button button-primary">
-                Place your order
+            <button
+              onClick={handlePlaceOrder}
+              className="place-order-button button-primary"
+            >
+              Place your order
             </button>
           </div>
         </div>

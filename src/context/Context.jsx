@@ -1,65 +1,51 @@
-import { createContext, useEffect, useState } from "react"
-import { products } from "../assets/Data"
+import { createContext, useEffect, useState } from "react";
+
 import axios from "../api/axios";
 
+export const datacontext = createContext(null);
 
-
-
-export const datacontext=createContext(null)
-
-const Contextprovider = ({children}) => {
+const Contextprovider = ({ children }) => {
   const [auth, setAuth] = useState({});
-  const [cart, setCart] = useState(
-    []
-  );
+  const [cart, setCart] = useState([]);
 
-  const [selectedDelivery, setSelectedDelivery] = useState({});
   const [cartQuantity, setCartQuantity] = useState(0);
- 
-  const [token,setToken]=useState('');
-  const [products,setProducts]=useState([])
 
-  const fetchproduct=async()=>{
-    const response=await axios.get('/api/it/list');
-    setProducts(response.data.data)
-  }
+  const [token, setToken] = useState("");
+  const [products, setProducts] = useState([]);
 
-// Frontend function to call the GET endpoint with token in headers
-const getCartData = async (token) => {
-  try {
-    const response = await axios.get('/api/cart/get', { headers: { token } });
-    if (response.data.success) {
-      // Convert cartdata object to array
-      const cartArray = Object.keys(response.data.cartdata).map((key) => {
-        return {
-          productId: key,
-          quantity: response.data.cartdata[key],
-        };
-      });
-      setCart(cartArray);
-    } else {
-      // Handle error: response.data.message contains the error message
+  const fetchproduct = async () => {
+    const response = await axios.get("/api/it/list");
+    setProducts(response.data.data);
+  };
+
+  const getCartData = async (token) => {
+    try {
+      const response = await axios.get("/api/cart/get", { headers: { token } });
+      if (response.data.success) {
+        const cartArray = Object.keys(response.data.cartdata).map((key) => {
+          return {
+            productId: key,
+            quantity: response.data.cartdata[key],
+          };
+        });
+        setCart(cartArray);
+      } else {
+      }
+    } catch (error) {
+      console.error("Error fetching cart data:", error);
     }
-  } catch (error) {
-    console.error('Error fetching cart data:', error);
-    // Handle error
-  }
-};
+  };
 
-
-
-
-  useEffect(()=>{
-    async function loaddata(){
+  useEffect(() => {
+    async function loaddata() {
       await fetchproduct();
-    if (localStorage.getItem('token')) {
-      setToken(localStorage.getItem('token')) 
-      await getCartData(localStorage.getItem('token'))
+      if (localStorage.getItem("token")) {
+        setToken(localStorage.getItem("token"));
+        await getCartData(localStorage.getItem("token"));
+      }
     }
-   
-  }
-  loaddata()
-  },[])
+    loaddata();
+  }, []);
 
   const updatequantity = () => {
     useEffect(() => {
@@ -69,10 +55,7 @@ const getCartData = async (token) => {
     }, [cart]);
   };
 
-
-  
-  
-  const handleAddToCart =async (productId) => {
+  const handleAddToCart = async (productId) => {
     const matchingItem = cart.find((item) => item.productId === productId);
 
     if (matchingItem) {
@@ -84,7 +67,7 @@ const getCartData = async (token) => {
             : item
         )
       );
-    } else { 
+    } else {
       const deliveryOptions = [
         {
           id: "1",
@@ -102,27 +85,22 @@ const getCartData = async (token) => {
           priceCents: 999,
         },
       ];
-     
+
       // Add new item to cart with quantity 1 and a unique deliveryId
       setCart([
         ...cart,
         {
           productId,
           quantity: 1,
-          
+
           deliveryoption: deliveryOptions,
         },
       ]);
     }
     if (token) {
-      await axios.post('/api/cart/add',{productId},{headers:{token}})
+      await axios.post("/api/cart/add", { productId }, { headers: { token } });
     }
-    
-  
   };
-
-
-
 
   const removeFromCart = (productId) => {
     const newCart = cart.filter((cartItem) => cartItem.productId !== productId);
@@ -130,58 +108,28 @@ const getCartData = async (token) => {
     //saveToStorage();
   };
 
-  const handleQuantityChange = (productId, event) => {
-    const newQuantity = parseInt(event.target.value);
-    if (isNaN(newQuantity) || newQuantity <= 0) {
-      return; // Handle invalid input (optional: display error message)
-    }
-
-    const updatedCart = cart.map((item) =>
-      item.productId === productId ? { ...item, quantity: newQuantity } : item
-    );
-    setCart(updatedCart);
-    saveToStorage(); // Call saveToStorage here or within a separate function
-  };
-
-  //const toggleUpdateMode = (productId) => {
-    //setUpdateModes((prevModes) => ({
-     // ...prevModes,
-      //[productId]: !prevModes[productId],
-   // }));
-  //};
-
-  const handleDeliveryChange = (productId, optionId) => {
-    setSelectedDelivery({ ...selectedDelivery, [productId]: optionId });
-  };
-
-  const selectedDeliveryDays = cart.map((item) => {
-    const selectedOption = item.deliveryoption?.find(
-      (option) => option.id === selectedDelivery[item.productId]
-    );
-    return selectedOption?.deliveryDays; // Return first found value
-  
-  });
-
-  
-
-  
-  
-
-  
-    
   return (
-    <datacontext.Provider value={{products, auth, setAuth,cart,selectedDeliveryDays
-      ,cartQuantity,handleAddToCart,
-      setCartQuantity,
-      setCart,
-    
-      updatequantity,removeFromCart,handleQuantityChange
-      ,handleDeliveryChange,selectedDelivery, setSelectedDelivery
-      ,token,setToken
-    }}>
+    <datacontext.Provider
+      value={{
+        products,
+        auth,
+        setAuth,
+        cart,
+        cartQuantity,
+        handleAddToCart,
+        setCartQuantity,
+        setCart,
+
+        updatequantity,
+        removeFromCart,
+
+        token,
+        setToken,
+      }}
+    >
       {children}
     </datacontext.Provider>
-  )
-}
+  );
+};
 
 export default Contextprovider;
