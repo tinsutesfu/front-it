@@ -33,7 +33,7 @@ const Amazon = ({products}) => {
   
   
 
-  const handleAddToCart =async (productId) => {
+  const handleAddToCart = async (productId) => {
     const matchingItem = cart.find((item) => item.productId === productId);
 
     if (matchingItem) {
@@ -45,41 +45,25 @@ const Amazon = ({products}) => {
             : item
         )
       );
-    } else { 
-      const deliveryOptions = [
-        {
-          id: "1",
-          deliveryDays: 7,
-          priceCents: 0,
-        },
-        {
-          id: "2",
-          deliveryDays: 3,
-          priceCents: 499,
-        },
-        {
-          id: "3",
-          deliveryDays: 1,
-          priceCents: 999,
-        },
-      ];
-     
-      // Add new item to cart with quantity 1 and a unique deliveryId
-      setCart([
-        ...cart,
-        {
-          productId,
-          quantity: 1,
-          
-          deliveryoption: deliveryOptions,
-        },
-      ]);
+    } else {
+      try {
+        // Add new item to cart with quantity 1
+        const response = await axios.post("/api/cart/add", { productId }, { headers: { token } });
+  
+        // Update state with new cart item and delivery options
+        setCart([
+          ...cart,
+          {
+            productId,
+            quantity: 1,
+            deliveryOptions: response.data.deliveryOptions, // Assuming deliveryOptions is sent back in response
+          },
+        ]);
+      } catch (error) {
+        console.error('Error adding to cart:', error);
+      }
     }
-    if (token) {
-      await axios.post('/api/cart/add',{productId},{headers:{token}})
-    }
-    
-    displaymessage(productId);
+   displaymessage(productId)
   };
 
   return (

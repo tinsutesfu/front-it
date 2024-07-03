@@ -22,19 +22,20 @@ const Contextprovider = ({ children }) => {
     try {
       const response = await axios.get("/api/cart/get", { headers: { token } });
       if (response.data.success) {
-        const cartArray = Object.keys(response.data.cartdata).map((key) => {
-          return {
-            productId: key,
-            quantity: response.data.cartdata[key],
-          };
-        });
+        const cartArray = response.data.cartdata.map((item) => ({
+          productId: item.productId,
+          quantity: item.quantity,
+          deliveryOptions: item.deliveryOptions, // Assuming delivery options are sent from backend
+        }));
         setCart(cartArray);
       } else {
+        // Handle error response if needed
       }
     } catch (error) {
       console.error("Error fetching cart data:", error);
     }
   };
+  
 
   useEffect(() => {
     async function loaddata() {
@@ -68,38 +69,24 @@ const Contextprovider = ({ children }) => {
         )
       );
     } else {
-      const deliveryOptions = [
-        {
-          id: "1",
-          deliveryDays: 7,
-          priceCents: 0,
-        },
-        {
-          id: "2",
-          deliveryDays: 3,
-          priceCents: 499,
-        },
-        {
-          id: "3",
-          deliveryDays: 1,
-          priceCents: 999,
-        },
-      ];
-
-      // Add new item to cart with quantity 1 and a unique deliveryId
-      setCart([
-        ...cart,
-        {
-          productId,
-          quantity: 1,
-
-          deliveryoption: deliveryOptions,
-        },
-      ]);
+      try {
+        // Add new item to cart with quantity 1
+        const response = await axios.post("/api/cart/add", { productId }, { headers: { token } });
+  
+        // Update state with new cart item and delivery options
+        setCart([
+          ...cart,
+          {
+            productId,
+            quantity: 1,
+            deliveryOptions: response.data.deliveryOptions, // Assuming deliveryOptions is sent back in response
+          },
+        ]);
+      } catch (error) {
+        console.error('Error adding to cart:', error);
+      }
     }
-    if (token) {
-      await axios.post("/api/cart/add", { productId }, { headers: { token } });
-    }
+   
   };
 
   const removeFromCart = (productId) => {

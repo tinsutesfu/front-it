@@ -22,13 +22,7 @@ const Checkout = ({}) => {
   //);
   const [selectedDelivery, setSelectedDelivery] = useState({});
 
-  useEffect(() => {
-    if (!token) {
-      navigate("/signin");
-    } else if (orderTotal === 0) {
-      navigate("/amazon");
-    }
-  }, [token]);
+ 
 
   updatequantity();
 
@@ -64,7 +58,7 @@ const Checkout = ({}) => {
   };
 
   const selectedDeliveryDays = cart.map((item) => {
-    const selectedOption = item.deliveryoption?.find(
+    const selectedOption = item.deliveryOptions?.find(
       (option) => option.id === selectedDelivery[item.productId]
     );
     return selectedOption?.deliveryDays; // Return first found value
@@ -77,7 +71,7 @@ const Checkout = ({}) => {
 
   // Calculate total shipping cost based on selected delivery option
   const totalShippingCost = cart.reduce((acc, item) => {
-    const selectedOption = item.deliveryoption?.find(
+    const selectedOption = item.deliveryOptions?.find(
       (option) => option.id === selectedDelivery[item.productId]
     );
     return acc + (selectedOption?.priceCents || 0) / 100;
@@ -120,6 +114,16 @@ const Checkout = ({}) => {
       },
     });
   };
+  
+  useEffect(() => {
+    if (!token) {
+      navigate("/signin");
+    } else if (orderTotal === 0) {
+      navigate("/amazon");
+    } else if (token){
+      navigate("/checkout");
+    }
+  }, [token,orderTotal]);
   return (
     <>
       <div className="checkout-header">
@@ -177,8 +181,8 @@ const Checkout = ({}) => {
                     />
 
                     <div className="cart-item-details">
-                      <div className="product-name">
-                        {products.find((p) => p._id === item.productId)?.name}
+                      <div className="product-name" title={products.find((p) => p._id === item.productId)?.name}>
+                        {products.find((p) => p._id === item.productId)?.name.length <= 25? products.find((p) => p._id === item.productId)?.name:`${products.find((p) => p._id === item.productId)?.name.slice(0,25)}...`}
                       </div>
                       <div className="product-price">
                         $
@@ -216,7 +220,7 @@ const Checkout = ({}) => {
                         delivery option with price:
                       </div>
 
-                      {item.deliveryoption?.map((option) => (
+                      {item.deliveryOptions?.map((option) => (
                         <div className="delivery-option" key={option.id}>
                           <input
                             type="radio"
@@ -225,6 +229,7 @@ const Checkout = ({}) => {
                             checked={
                               selectedDelivery[item.productId] === option.id
                             }
+                            required
                             onChange={() =>
                               handleDeliveryChange(item.productId, option.id)
                             }

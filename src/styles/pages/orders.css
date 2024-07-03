@@ -15,6 +15,7 @@ max-width: max(30%,500px);
 font-size: 30px;
 font-weight: 600;
 margin-bottom: 50px;
+color: #ffcc66;
 }
 .place-order-left input{
   margin-bottom: 15px;
@@ -72,6 +73,7 @@ background-color: goldenrod;
 
 .order-header-label {
   font-weight: 700;
+  
 }
 
 .order-date,
@@ -212,4 +214,17 @@ background-color: goldenrod;
     row-gap: 0;
     padding-bottom: 8px;
   }
+}
+.button{
+  margin: 10px;
+  padding: 5px;
+  background-color: #ffcc66;
+  width: 100%;
+  border: none;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: larger;
+}
+.button:hover{
+  background-color: tomato;
 }

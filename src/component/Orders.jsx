@@ -40,21 +40,28 @@ const submitorder = async (e) => {
   // You can add validation similar to the improved response in the previous explanation.
 
   // 2. Prepare Order Data:
-  const orderItems = cart.map((item) => {
+  const orderItems = cart?.map((item) => {
     return {
+      name:products.find((p) => p._id === item.productId)?.name,
       productId: item.productId,
       quantity: item.quantity,
-      deliveryOptionId: selectedDelivery[item.productId], // Use selectedDelivery from props
+      deliveryOptionId: `Delivery date: ${dayjs()
+                          .add(
+                            // Find the selected delivery option for this item
+                            item.deliveryOptions?.find(
+                              (option) =>
+                                option.id === selectedDelivery[item.productId]
+                            )?.deliveryDays,
+                            "day"
+                          )
+                          .format("dddd, MMMM D")}`, // Use selectedDelivery from props
     };
   });
 console.log(orderItems)
   const orderData = {
     address:data,
     items:orderItems,
-   amount: orderTotal, // Use orderTotal from props
-    deliveryInformation: {
-      // ... extract delivery information from user-entered data (data state)
-    },
+   amount: (orderTotal).toFixed(2),
     deliveryId, // Include newDeliveryId if applicable
   };
 console.log(orderData)
@@ -64,8 +71,10 @@ try {
     headers: 
       {token}, // Include token in Authorization header
        });
-       if (response.data.success){
+       if (response.data.success && orderItems!==undefined){
         navigate('/tracking')
+       }else {
+      alert('incomplete orderdata')
        }
     
 } catch (error) {
@@ -79,10 +88,10 @@ try {
 useEffect(()=>{
   if (!token ) {
     navigate('/signin')
-  } else if (orderTotal===0) {
-    navigate('/amazon')
+  } else if (!cart) {
+    navigate('/checkout')
   } 
-},[token,orderTotal])
+},[token,cart])
 
   return (
     <>
@@ -90,23 +99,23 @@ useEffect(()=>{
         <div className="place-order-left">
           <p className="title">delivery information</p>
           <div className="multi-field">
-            <input  name="firstname" onChange={onchangehanndler} value={data.firstname} type="text" placeholder="first name" />
-            <input  name="lastname" onChange={onchangehanndler} value={data.lastname} type="text" placeholder="last name" />
+            <input required  name="firstname" onChange={onchangehanndler} value={data.firstname} type="text" placeholder="first name" />
+            <input required  name="lastname" onChange={onchangehanndler} value={data.lastname} type="text" placeholder="last name" />
           </div>
           <div className="multi-field">
-            <input  name="email" onChange={onchangehanndler} value={data.email} type="email" placeholder="email address" />
-            <input  name="street" onChange={onchangehanndler} value={data.street} type="text" placeholder="street" />
+            <input required  name="email" onChange={onchangehanndler} value={data.email} type="email" placeholder="email address" />
+            <input required  name="street" onChange={onchangehanndler} value={data.street} type="text" placeholder="street" />
           </div>
           <div className="multi-field">
-            <input  name="city" onChange={onchangehanndler} value={data.city} type="text" placeholder="city" />
-            <input  name="state" onChange={onchangehanndler} value={data.state} type="text" placeholder="state" />
+            <input required  name="city" onChange={onchangehanndler} value={data.city} type="text" placeholder="city" />
+            <input required  name="state" onChange={onchangehanndler} value={data.state} type="text" placeholder="state" />
           </div>
           <div className="multi-field">
-            <input  name="zipcode" onChange={onchangehanndler} value={data.zipcode} type="text" placeholder="zip code" />
-            <input  name="country" onChange={onchangehanndler} value={data.country} type="text" placeholder="country" />
+            <input required  name="zipcode" onChange={onchangehanndler} value={data.zipcode} type="text" placeholder="zip code" />
+            <input required  name="country" onChange={onchangehanndler} value={data.country} type="text" placeholder="country" />
           </div>
           <div className="multi-field">
-            <input  name="phone" onChange={onchangehanndler} value={data.phone} type="text" placeholder="phone" />
+            <input required  name="phone" onChange={onchangehanndler} value={data.phone} type="text" placeholder="phone" />
           </div>
          
         </div>
@@ -138,7 +147,7 @@ useEffect(()=>{
                         `Delivery date: ${dayjs()
                           .add(
                             // Find the selected delivery option for this item
-                            item.deliveryoption?.find(
+                            item.deliveryOptions?.find(
                               (option) =>
                                 option.id === selectedDelivery[item.productId]
                             )?.deliveryDays,
@@ -162,8 +171,8 @@ useEffect(()=>{
                       />
 
                       <div className="cart-item-details">
-                        <div className="product-name">
-                          {products.find((p) => p._id === item.productId)?.name}
+                        <div className="product-name"title={products.find((p) => p._id === item.productId)?.name}>
+                        {products.find((p) => p._id === item.productId)?.name.length <= 25? products.find((p) => p._id === item.productId)?.name:`${products.find((p) => p._id === item.productId)?.name.slice(0,25)}...`}
                         </div>
                         <div className="product-price">
                           $
@@ -187,11 +196,13 @@ useEffect(()=>{
           </div> 
           <div className="multi-field">
           
-    <button type="submit">Proceed to Payment</button>
+  
    
   
 
-          </div>
+          </div> 
+          
+           <button className="button" type="submit">Proceed to Payment</button>
         </div>
         
       </form>

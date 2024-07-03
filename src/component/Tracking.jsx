@@ -38,13 +38,17 @@ console.log(response.data)
 <img src='images/lap.del.jpg'/>
 <p>{order.items.map((item,index)=>{
   if (index===order.items.length-1) {
-    return item.productId +'x'+item.quantity
+    return item.name +'x'+item.quantity
   } else {
-    return item.productId +'x'+item.quantity+','
+    return item.name +'x'+item.quantity+','
   }
 })}</p>
-<p>{order.amount}.00</p>
+<p>{(order.amount).toFixed(2)}</p>
 <p>items:{order.items.length}</p>
+<p><span>&#x25cf;</span>deliveryID:{order.deliveryId}</p>
+<p><span>&#x25cf;</span>{order.items.map((item)=>{
+  return item.deliveryOptionId;
+})}</p>
 <p><span>&#x25cf;</span>{order.status}</p>
 <button onClick={fetchorder}>track order</button>
             </div>
@@ -54,25 +58,7 @@ console.log(response.data)
 
       
 
-         <div className="delivery-date">
-          Arriving on Monday, June 13
-        </div>
-
-        <div className="progress-labels-container">
-          <div className="progress-label">
-            Preparing
-          </div>
-          <div className="progress-label current-status">
-            Shipped
-          </div>
-          <div className="progress-label">
-            Delivered
-          </div>
-        </div>
-
-        <div className="progress-bar-container">
-          <div className="progress-bar"></div>
-        </div>
+        
       </div>
     
     </>
