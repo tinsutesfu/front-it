@@ -17,12 +17,8 @@ const Checkout = ({}) => {
     setCart,
     updatequantity,
   } = useContext(datacontext);
-  // const [updateModes, setUpdateModes] = useState(
-  // cart.reduce((acc, item) => ({ ...acc, [item.productId]: false }), {})
-  //);
-  const [selectedDelivery, setSelectedDelivery] = useState({});
 
- 
+  const [selectedDelivery, setSelectedDelivery] = useState({});
 
   updatequantity();
 
@@ -114,16 +110,16 @@ const Checkout = ({}) => {
       },
     });
   };
-  
+
   useEffect(() => {
     if (!token) {
       navigate("/signin");
     } else if (orderTotal === 0) {
       navigate("/amazon");
-    } else if (token){
+    } else if (token) {
       navigate("/checkout");
     }
-  }, [token,orderTotal]);
+  }, [token, orderTotal]);
   return (
     <>
       <div className="checkout-header">
@@ -181,8 +177,18 @@ const Checkout = ({}) => {
                     />
 
                     <div className="cart-item-details">
-                      <div className="product-name" title={products.find((p) => p._id === item.productId)?.name}>
-                        {products.find((p) => p._id === item.productId)?.name.length <= 25? products.find((p) => p._id === item.productId)?.name:`${products.find((p) => p._id === item.productId)?.name.slice(0,25)}...`}
+                      <div
+                        className="product-name"
+                        title={
+                          products.find((p) => p._id === item.productId)?.name
+                        }
+                      >
+                        {products.find((p) => p._id === item.productId)?.name
+                          .length <= 25
+                          ? products.find((p) => p._id === item.productId)?.name
+                          : `${products
+                              .find((p) => p._id === item.productId)
+                              ?.name.slice(0, 25)}...`}
                       </div>
                       <div className="product-price">
                         $

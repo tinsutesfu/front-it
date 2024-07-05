@@ -5,8 +5,7 @@ const Header = () => {
     <div className="header" id="header">
       <div className="header-content">
         <h2>Elevate your style with the latest laptops</h2>
-
-        <img src={"/images/laptop.jpg"} />
+        <img src={"/images/laptop.jpg"} alt="Laptop" />
         <div className="left">
           <p>
             Discover a curated collection of stylish laptops that seamlessly

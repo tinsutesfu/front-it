@@ -1,4 +1,4 @@
-.place-order{
+.place-order {
   display: flex;
   align-items: start;
   justify-content: space-between;
@@ -7,44 +7,42 @@
   margin-left: 20px;
   margin-right: 20px;
 }
-.place-order-left{
-width: 100%;
-max-width: max(30%,500px);
+.place-order-left {
+  width: 100%;
+  max-width: max(30%, 500px);
 }
-.title{
-font-size: 30px;
-font-weight: 600;
-margin-bottom: 50px;
-color: #ffcc66;
+.title {
+  font-size: 30px;
+  font-weight: 600;
+  margin-bottom: 50px;
+  color: #ffcc66;
 }
-.place-order-left input{
+.place-order-left input {
   margin-bottom: 15px;
   width: 100%;
   padding: 10px;
   border: 1px solid #c5c5c5;
   border-radius: 4px;
-  outline-color:tomato ;
+  outline-color: tomato;
 }
-.input-button{
+.input-button {
   font-size: large;
   font-weight: 500;
   background-color: tomato;
   color: white;
   cursor: pointer;
 }
-.input-button:hover{
-background-color: goldenrod;
+.input-button:hover {
+  background-color: goldenrod;
 }
-.multi-field{
+.multi-field {
   display: flex;
   gap: 10px;
 }
 .place-order-right {
   width: 100%;
-  max-width:max (40%,500px);
- 
+  max-width: max (40%, 500px);
 }
-
 
 .orders-grid {
   display: grid;
@@ -73,7 +71,6 @@ background-color: goldenrod;
 
 .order-header-label {
   font-weight: 700;
-  
 }
 
 .order-date,
@@ -86,7 +83,7 @@ background-color: goldenrod;
 }
 
 @media (max-width: 575px) {
-  .place-order{
+  .place-order {
     margin-top: 180px;
   }
   .order-header {
@@ -127,7 +124,7 @@ background-color: goldenrod;
   grid-template-columns: 110px 1fr 220px;
   column-gap: 35px;
   row-gap: 60px;
-  align-items: center; 
+  align-items: center;
 }
 
 @media (max-width: 800px) {
@@ -144,8 +141,6 @@ background-color: goldenrod;
   }
 }
 
-
-
 .product-name {
   font-weight: 700;
   margin-bottom: 5px;
@@ -159,24 +154,25 @@ background-color: goldenrod;
   margin-bottom: 8px;
 }
 
-
-
-
 @media (max-width: 800px) {
-  /* Adjustments for screens under 800px */
   .place-order-left,
   .place-order-right {
     max-width: 100%;
   }
-
+  .order-header {
+    flex-direction: column;
+    align-items: start;
+    line-height: 23px;
+    padding: 15px;
+  }
   .orders-grid {
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Adjust based on desired minimum column width */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   }
 }
 
 @media (max-width: 575px) {
-  /* Adjustments for screens under 575px */
   .place-order {
+    margin-top: 230px;
     flex-direction: column;
   }
 
@@ -215,7 +211,7 @@ background-color: goldenrod;
     padding-bottom: 8px;
   }
 }
-.button{
+.button {
   margin: 10px;
   padding: 5px;
   background-color: #ffcc66;
@@ -225,6 +221,6 @@ background-color: goldenrod;
   font-weight: 700;
   font-size: larger;
 }
-.button:hover{
+.button:hover {
   background-color: tomato;
 }

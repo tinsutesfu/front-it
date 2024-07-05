@@ -14,8 +14,16 @@ const Contextprovider = ({ children }) => {
   const [products, setProducts] = useState([]);
 
   const fetchproduct = async () => {
-    const response = await axios.get("/api/it/list");
-    setProducts(response.data.data);
+    try {
+      const response = await axios.get('/api/it/list', { headers: { token } });
+      const productsWithRatings = response.data.data.map((product,userId) => ({
+        ...product,
+        userRating: product.userRatings.find(rating => rating.userId === userId) || null
+      }));
+      setProducts(productsWithRatings);
+    } catch (error) {
+      console.error('Error fetching product data:', error);
+    }
   };
 
   const getCartData = async (token) => {
@@ -39,14 +47,17 @@ const Contextprovider = ({ children }) => {
 
   useEffect(() => {
     async function loaddata() {
-      await fetchproduct();
+      if (token) {
+          await fetchproduct();
+      }
+    
       if (localStorage.getItem("token")) {
         setToken(localStorage.getItem("token"));
         await getCartData(localStorage.getItem("token"));
       }
     }
     loaddata();
-  }, []);
+  }, [token]);
 
   const updatequantity = () => {
     useEffect(() => {

@@ -1,12 +1,15 @@
 import "../styles/pages/amazon.css";
 import axios from "../api/axios";
 import { datacontext } from "../context/Context";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Rating } from "@mui/material";
+import { toast } from "react-toastify";
 
-const Amazon = ({products}) => {
-  const {cart,setCart,token} = useContext(datacontext);
-  const navigate=useNavigate()
+const Amazon = ({ products }) => {
+  const [userRatings, setUserRatings] = useState({});
+  const { cart, setCart, token } = useContext(datacontext);
+  const navigate = useNavigate();
   let timeoutId;
 
   const displaymessage = (productId) => {
@@ -23,21 +26,18 @@ const Amazon = ({products}) => {
     }, 2000);
   };
 
-  useEffect(()=>{
-    if (!token ) {
-      navigate('/signin')
-    } else  {
-      navigate('/amazon')
-    } 
-  },[token])
-  
-  
+  useEffect(() => {
+    if (!token) {
+      navigate("/signin");
+    } else {
+      navigate("/amazon");
+    }
+  }, [token]);
 
   const handleAddToCart = async (productId) => {
     const matchingItem = cart.find((item) => item.productId === productId);
 
     if (matchingItem) {
-      // Update quantity for existing item in cart
       setCart(
         cart.map((item) =>
           item.productId === productId
@@ -47,23 +47,53 @@ const Amazon = ({products}) => {
       );
     } else {
       try {
-        // Add new item to cart with quantity 1
-        const response = await axios.post("/api/cart/add", { productId }, { headers: { token } });
-  
-        // Update state with new cart item and delivery options
+        const response = await axios.post(
+          "/api/cart/add",
+          { productId },
+          { headers: { token } }
+        );
+
         setCart([
           ...cart,
           {
             productId,
             quantity: 1,
-            deliveryOptions: response.data.deliveryOptions, // Assuming deliveryOptions is sent back in response
+            deliveryOptions: response.data.deliveryOptions,
           },
         ]);
       } catch (error) {
-        console.error('Error adding to cart:', error);
+        console.error("Error adding to cart:", error);
       }
     }
-   displaymessage(productId)
+    displaymessage(productId);
+  };
+
+  const handleRatingChange = async (productId, newRating) => {
+    try {
+      const response = await axios.post(
+        "/api/it/rating",
+        { productId, rating: newRating },
+        { headers: { token } }
+      );
+
+      if (response.data.success) {
+        setUserRatings((prevRatings) => ({
+          ...prevRatings,
+          [productId]: {
+            rating: newRating,
+            count: prevRatings[productId]?.count
+              ? prevRatings[productId].count + 1
+              : 1,
+          },
+        }));
+        toast.success("Your rating has been submitted!");
+      } else {
+        toast.error("Failed to submit your rating. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error submitting rating:", error);
+      toast.error("An error occurred. Please try again later.");
+    }
   };
 
   return (
@@ -75,8 +105,7 @@ const Amazon = ({products}) => {
               <div className="product-image-container">
                 <img
                   className="product-image"
-                  src={'http://localhost:3500/images/'+
-                    product.image}
+                  src={"http://localhost:3500/images/" + product.image}
                   alt={product.image}
                 />
               </div>
@@ -90,13 +119,19 @@ const Amazon = ({products}) => {
               </div>
 
               <div className="product-rating-container">
-                <img
-                  className="product-rating-stars"
-                  src={`images/ratings/rating-${product.ratingstars * 10}.png`}
-                  alt={`Rating: ${product.ratingstars}`}
+                <Rating
+                  name={`user-rating-${product._id}`}
+                  readOnly={!!product.userRating * 10}
+                  value={product.userRating?.rating * 10 || 0}
+                  onChange={(event, newRating) =>
+                    handleRatingChange(product._id, newRating)
+                  }
+                  precision={0.5}
+                  size="small"
                 />
+
                 <div className="product-rating-count link-primary">
-                  {product.ratingcount}
+                  {product.ratingcount || 0}
                 </div>
               </div>
 
@@ -112,9 +147,8 @@ const Amazon = ({products}) => {
               </div>
 
               <button
-                className='add-to-cart-button button-primary '
+                className="add-to-cart-button button-primary "
                 onClick={() => handleAddToCart(product._id)}
-                
               >
                 Add to Cart
               </button>
