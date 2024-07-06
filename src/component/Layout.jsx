@@ -35,7 +35,7 @@ const Layout = ({ search, setSearch }) => {
     <>
       <div className="amazon-header">
         <div className="amazon-header-left-section">
-          <Link to="amazon" className="header-link">
+          <Link to="amazon" className="header-link header-logo">
             <img className="amazon-logo" src="images/t-zon.jpg" />
           </Link>
 
