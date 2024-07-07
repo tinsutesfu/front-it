@@ -129,7 +129,7 @@ const Checkout = ({}) => {
               <img className="amazon-logo" src="images/t-zon.jpg" />
               <img
                 className="amazon-mobile-logo"
-                src="images/amazon-mobile-logo.png"
+                src="images/amazon-mobile-logo-white.png"
               />
             </Link>
           </div>
