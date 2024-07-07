@@ -104,9 +104,8 @@ const Amazon = ({ products }) => {
             <div className="product-container" key={product._id}>
               <div className="product-image-container">
                 <img
-                  className="product-image" src={
-                    "https://front-it-solution.onrender.com/images/"+ product.image}
-                  alt={product.image}
+                  className="product-image" 
+  
                 />
               </div>
 
