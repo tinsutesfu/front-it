@@ -221,7 +221,7 @@ const Orders = () => {
                       <img
                         className="product-image"
                         src={
-                          "http://localhost:3500/images/" +
+                          "https://front-it-solution.onrender.com/images/" +
                           products.find((p) => p._id === item.productId)?.image
                         }
                         alt={
