@@ -170,10 +170,8 @@ const Checkout = ({}) => {
                   <div className="cart-item-details-grid">
                     <img
                       className="product-image"
-                      src={
-                        "https://front-it-solution.onrender.com/images/" +
-                        products.find((p) => p._id === item.productId)?.image
-                      }
+                      src=
+                        "public/images/lap.del.jpg"
                     />
 
                     <div className="cart-item-details">
