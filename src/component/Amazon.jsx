@@ -105,7 +105,7 @@ const Amazon = ({ products }) => {
               <div className="product-image-container">
                 <img
                   className="product-image" 
- src="images/lap.del.jpg"
+ src="images/lap.del.jpg" />
               </div>
 
               <div className="product-name">
