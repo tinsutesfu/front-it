@@ -221,7 +221,7 @@ const Orders = () => {
                       <img
                         className="product-image"
                         src=
-                          "public/images/lap.del.jpg"
+                          "images/lap.del.jpg"
                         alt={
                           products.find((p) => p._id === item.productId)?.name
                         } // Added alt text for accessibility
