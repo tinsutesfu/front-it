@@ -171,7 +171,7 @@ const Checkout = ({}) => {
                     <img
                       className="product-image"
                       src={
-                        "/https://front-it-solution.onrender.com/images/" +
+                        "https://front-it-solution.onrender.com/images/" +
                         products.find((p) => p._id === item.productId)?.image
                       }
                     />
