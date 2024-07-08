@@ -171,7 +171,7 @@ const Checkout = ({}) => {
                     <img
                       className="product-image"
                       src=
-                        "public/images/lap.del.jpg"
+                        "images/lap.del.jpg"
                     />
 
                     <div className="cart-item-details">
