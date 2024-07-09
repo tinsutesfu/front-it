@@ -220,10 +220,8 @@ const Orders = () => {
                     <div className="order-details-grid">
                       <img
                         className="product-image"
-                        src={
-                          "http://localhost:3500/images/" +
-                          products.find((p) => p._id === item.productId)?.image
-                        }
+                        src=
+                          "images/lap.del.jpg"
                         alt={
                           products.find((p) => p._id === item.productId)?.name
                         } // Added alt text for accessibility

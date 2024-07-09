@@ -36,6 +36,9 @@
 }
 
 @media (max-width: 575px) {
+  .checkout-header{
+    background:gray;
+  }
   .checkout-header-left-section {
     width: auto;
   }

@@ -129,7 +129,7 @@ const Checkout = ({}) => {
               <img className="amazon-logo" src="images/t-zon.jpg" />
               <img
                 className="amazon-mobile-logo"
-                src="images/amazon-mobile-logo.png"
+                src="images/amazon-mobile-logo-white.png"
               />
             </Link>
           </div>
@@ -170,10 +170,8 @@ const Checkout = ({}) => {
                   <div className="cart-item-details-grid">
                     <img
                       className="product-image"
-                      src={
-                        "http://localhost:3500/images/" +
-                        products.find((p) => p._id === item.productId)?.image
-                      }
+                      src=
+                        "images/lap.del.jpg"
                     />
 
                     <div className="cart-item-details">
