@@ -171,7 +171,7 @@ const Checkout = ({}) => {
                     <img
                       className="product-image"
                       src=
-                        "images/lap.del.jpg"
+                      {`/uploads/${ products.find((p) => p._id === item.productId)?.image}`}
                     />
 
                     <div className="cart-item-details">
