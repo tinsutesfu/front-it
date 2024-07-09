@@ -105,7 +105,7 @@ const Amazon = ({ products }) => {
               <div className="product-image-container">
                 <img
                   className="product-image"
-                  src={"http://localhost:3500/images/" + product.image}
+                  src={`/uploads/${product.image}`}
                   alt={product.image}
                 />
               </div>
@@ -121,7 +121,7 @@ const Amazon = ({ products }) => {
               <div className="product-rating-container">
                 <Rating
                   name={`user-rating-${product._id}`}
-                  readOnly={!!product.userRating * 10}
+                   readOnly={!!product.userRating * 10}
                   value={product.userRating?.rating * 10 || 0}
                   onChange={(event, newRating) =>
                     handleRatingChange(product._id, newRating)
