@@ -53,6 +53,7 @@ label,
 
 .button {
   padding: 0.5rem;
+  margin-left: 2px;
 }
 
 .instructions {
@@ -128,6 +129,7 @@ label,
   }
   .button {
     padding: 0.3rem;
+    margin-left: 3px;
   }
   section {
     padding: 0.5rem;
@@ -146,6 +148,7 @@ label,
   }
   .button {
     padding: 0.2rem;
+    margin-left: 2px;
   }
   section {
     padding: 0.25rem;
